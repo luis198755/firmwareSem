@@ -15,19 +15,23 @@ void loop() {
   // Declaración de variables locales
   
   // Función de tiempo real
+  tiempoReal();
   
   // Modos de funcionamiento
   switch (modo){
     case 0: //Aislado
-      //Actualiza la máquina de estados
-      ActualizarSemaforo();
-      break;
+        //Actualiza la máquina de estados
+        aislado();
+        break;
     case 1: //Manual
-      break;
+        manual();
+        break;
     case 2: //Destello
-      break;
+        destello();
+        break;
     case 3: //Sincronizado
-      break;
+        sincronizado();
+        break;
   } 
 }
 //////////////////////*Funciones*/////////////////////////
@@ -98,4 +102,19 @@ void edo5(){
 // Estado 6
 void edo6(){
   
+}
+// Función de tiempo real
+tiempoReal(){
+
+}
+// Función de modo manual
+void manual(){
+
+}
+// Función de destello
+void destello(){
+// Función de sincronización
+}
+void sincronizado(){
+
 }
