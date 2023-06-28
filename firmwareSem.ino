@@ -1,18 +1,45 @@
 // Librerías
+////*Definición de pindes de McU para control de registros*///
+int pinData  = 2;
+int pinLatch = 3;
+int pinClock = 4;
 
 // Variables Globales
-
+//Variables de la máquina de estado
+int Estado = 0;
+int edoDes = 0;
+int flag = 0;
+int modo = 2;
+//Variable de control del Timer (millis)
+unsigned long previousTime = 0;
+unsigned long te = 375;
+unsigned long t = te;
 //////////////*Void Setup*/////////////
 void setup() {
   //Inicialización del puerto serial del mCU
-  
+
   //Designación de  pines del mCU como entrada y salida
+  ////////////*Definición de pines como salida*////////////
+  pinMode(pinData, OUTPUT);
+  pinMode(pinLatch, OUTPUT);
+  pinMode(pinClock, OUTPUT);
+  /////////////////////////////////////////////////////////
 
   // Apagado de todas las fases
 }
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
+  //Variable de tiempo actual del timer
+  unsigned long currentTime = millis();
+
+  //Revisión de tiempo cumplido
+  if ( (currentTime - previousTime >= t) ){
+    previousTime = currentTime;
+    flag = 1;
+    Serial.print("Estado: ");
+    Serial.println(Estado);
+  }
   
   // Función de tiempo real
   tiempoReal();
@@ -104,17 +131,48 @@ void edo6(){
   
 }
 // Función de tiempo real
-tiempoReal(){
+void tiempoReal(){
 
 }
 // Función de modo manual
 void manual(){
 
 }
+// Función de modo aislado
+void aislado(){
+	
+}
 // Función de destello
 void destello(){
-// Función de sincronización
+    switch (edoDes){
+    case 0: //
+        ledWrite(B01001001,B00100100,B10010010); //delay(375);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 1: //
+        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 375;
+        }
+        break;
+} 
+   	
 }
+// Función de sincronización
 void sincronizado(){
 
+}
+////*Función de interface de Registros de Desplazamiento*////
+void ledWrite(int Reg1, int Reg2, int Reg3){
+   shiftOut(pinData, pinClock, LSBFIRST, Reg3);
+   shiftOut(pinData, pinClock, LSBFIRST, Reg2);
+   shiftOut(pinData, pinClock, LSBFIRST, Reg1);
+   digitalWrite(pinLatch, HIGH);
+   digitalWrite(pinLatch, LOW);
 }
