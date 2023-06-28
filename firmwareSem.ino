@@ -143,8 +143,25 @@ void aislado(){
 }
 // Función de destello
 void destello(){
- 	ledWrite(B01001001,B00100100,B10010010); delay(375);//F1Verde_On
-  	ledWrite(B00000000,B00000000,B00000000); delay(375);
+    switch (edoDes){
+    case 0: //
+        ledWrite(B01001001,B00100100,B10010010); delay(375);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 1: //
+        ledWrite(B00000000,B00000000,B00000000); delay(375);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 375;
+        }
+        break;
+} 
+   	
 }
 // Función de sincronización
 void sincronizado(){
