@@ -7,11 +7,12 @@ int pinClock = 4;
 // Variables Globales
 //Variables de la máquina de estado
 int Estado = 0;
+int edoDes = 0;
 int flag = 0;
 int modo = 2;
 //Variable de control del Timer (millis)
 unsigned long previousTime = 0;
-unsigned long te = 1000;
+unsigned long te = 375;
 unsigned long t = te;
 //////////////*Void Setup*/////////////
 void setup() {
@@ -145,7 +146,7 @@ void aislado(){
 void destello(){
     switch (edoDes){
     case 0: //
-        ledWrite(B01001001,B00100100,B10010010); delay(375);
+        ledWrite(B01001001,B00100100,B10010010); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -153,7 +154,7 @@ void destello(){
         }
         break;
     case 1: //
-        ledWrite(B00000000,B00000000,B00000000); delay(375);
+        ledWrite(B00000000,B00000000,B00000000); //delay(375);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
