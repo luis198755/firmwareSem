@@ -1,15 +1,21 @@
 // Librerías
-////*Definición de pindes de McU para control de registros*///
+////*Definición de pines de McU para control de registros*///
 int pinData  = 2;
 int pinLatch = 3;
 int pinClock = 4;
-
+////*Definición de pines de McU de entrada para pruebas*///
+#define CantidadBotonEntrada 4
+int botonEntrada[CantidadBotonEntrada] = {5, 6, 7, 8};
+/*int pinAislado  = 5;
+int pinManual = 6;
+int pinDestello = 7;
+int pinSincronizado = 8;*/
 // Variables Globales
 //Variables de la máquina de estado
 int Estado = 0;
 int edoDes = 0;
 int flag = 0;
-int modo = 2;
+int modo = 0;
 //Variable de control del Timer (millis)
 unsigned long previousTime = 0;
 unsigned long te = 375;
@@ -23,43 +29,23 @@ void setup() {
   pinMode(pinData, OUTPUT);
   pinMode(pinLatch, OUTPUT);
   pinMode(pinClock, OUTPUT);
+  ////////////*Definición de pines como entrada*////////////
+  for (int i=0; i<CantidadBotonEntrada; i=i+1){
+    pinMode(botonEntrada[i], INPUT);
+  }
   /////////////////////////////////////////////////////////
 
   // Apagado de todas las fases
+  fasesOff(); delay(3000);
 }
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
-  //Variable de tiempo actual del timer
-  unsigned long currentTime = millis();
-
-  //Revisión de tiempo cumplido
-  if ( (currentTime - previousTime >= t) ){
-    previousTime = currentTime;
-    flag = 1;
-    Serial.print("Estado: ");
-    Serial.println(Estado);
-  }
-  
   // Función de tiempo real
   tiempoReal();
-  
-  // Modos de funcionamiento
-  switch (modo){
-    case 0: //Aislado
-        //Actualiza la máquina de estados
-        aislado();
-        break;
-    case 1: //Manual
-        manual();
-        break;
-    case 2: //Destello
-        destello();
-        break;
-    case 3: //Sincronizado
-        sincronizado();
-        break;
-  } 
+
+  // Lectura de Modo
+  modofunc();
 }
 //////////////////////*Funciones*/////////////////////////
 //Función de Estados
@@ -100,7 +86,7 @@ void ActualizarSemaforo() {
 }
 // Apagar todas las fases
 void fasesOff(){
-  
+    ledWrite(B00000000,B00000000,B00000000); 
 }
 // Estado 0
 void edo0(){
@@ -130,21 +116,79 @@ void edo5(){
 void edo6(){
   
 }
+// Función de Modo
+void modofunc(){
+  int buttonState[CantidadBotonEntrada];
+  for (int i=0; i<CantidadBotonEntrada; i=i+1){
+    buttonState[i] = digitalRead(botonEntrada[i]);
+    if (buttonState[i]==HIGH && i==0){
+      modo = 0;
+    }
+    else if (buttonState[i]==HIGH && i==1){
+      modo = 1;
+    }else if (buttonState[i]==HIGH && i==2){
+      modo = 2;
+    }else if (buttonState[i]==HIGH && i==3){
+      modo = 3;
+    }
+  }
+  // Modos de funcionamiento
+  switch (modo){
+    case 0: //Aislado
+        //Actualiza la máquina de estados
+        aislado();
+        break;
+    case 1: //Manual
+        manual();
+        break;
+    case 2: //Destello
+        destello();
+        break;
+    case 3: //Sincronizado
+        sincronizado();
+        break;
+  } 
+}
 // Función de tiempo real
 void tiempoReal(){
-
+  //Variable de tiempo actual del timer
+  unsigned long currentTime = millis();
+  //Revisión de tiempo cumplido
+  if ( (currentTime - previousTime >= t) ){
+    previousTime = currentTime;
+    flag = 1;
+    Serial.print("Estado: ");
+    Serial.println(Estado);
+  }
 }
 // Función de modo manual
 void manual(){
-
+  switch (edoDes){
+    case 0: //
+        ledWrite(B00100100,B10010010,B01001001); //delay(375);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 100;
+        }
+        break;
+    case 1: //
+        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 100;
+        }
+        break;
+  } 
 }
 // Función de modo aislado
 void aislado(){
-	
+  ledWrite(B11111111,B00000000,B11111111); //delay(375);
 }
 // Función de destello
 void destello(){
-    switch (edoDes){
+  switch (edoDes){
     case 0: //
         ledWrite(B01001001,B00100100,B10010010); //delay(375);
         if (flag == 1){
@@ -161,12 +205,28 @@ void destello(){
             t = 375;
         }
         break;
-} 
-   	
+  } 
 }
 // Función de sincronización
 void sincronizado(){
-
+  switch (edoDes){
+    case 0: //
+        ledWrite(B11111111,B11111111,B11111111); //delay(375);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 200;
+        }
+        break;
+    case 1: //
+        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 200;
+        }
+        break;
+  }
 }
 ////*Función de interface de Registros de Desplazamiento*////
 void ledWrite(int Reg1, int Reg2, int Reg3){
