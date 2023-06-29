@@ -6,10 +6,7 @@ int pinClock = 4;
 ////*Definición de pines de McU de entrada para pruebas*///
 #define CantidadBotonEntrada 4
 int botonEntrada[CantidadBotonEntrada] = {5, 6, 7, 8};
-/*int pinAislado  = 5;
-int pinManual = 6;
-int pinDestello = 7;
-int pinSincronizado = 8;*/
+
 // Variables Globales
 //Variables de la máquina de estado
 int Estado = 0;
@@ -20,9 +17,15 @@ int modo = 0;
 unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = te;
+// Variables de Programación
+unsigned long EscOff = 0b00000000000000000000000000000000;
+unsigned long Esc1 = 0b10000000100000001000000010000000;
+unsigned long Esc2 = 0b00000000000000000000000000000000;
+unsigned long Esc3 = 0b00000000000000000000000000000000;
 //////////////*Void Setup*/////////////
 void setup() {
   //Inicialización del puerto serial del mCU
+  Serial.begin(9600);
 
   //Designación de  pines del mCU como entrada y salida
   ////////////*Definición de pines como salida*////////////
@@ -30,7 +33,7 @@ void setup() {
   pinMode(pinLatch, OUTPUT);
   pinMode(pinClock, OUTPUT);
   ////////////*Definición de pines como entrada*////////////
-  for (int i=0; i<CantidadBotonEntrada; i=i+1){
+  for (int i=0; i<CantidadBotonEntrada; i++){
     pinMode(botonEntrada[i], INPUT);
   }
   /////////////////////////////////////////////////////////
@@ -41,6 +44,65 @@ void setup() {
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
+  unsigned long aux1 = 0b00000000000000000000000011111111;
+  unsigned long aux2 = 0b00000000000000001111111100000000;
+  unsigned long aux3 = 0b00000000111111110000000000000000;
+  unsigned long aux4 = 0b11111111000000000000000000000000;
+
+  unsigned long aux5 = 0b11111111000010001000001011110111;
+  unsigned bit, bitAux1, bitAux2, bitAux3, bitAux4, bitAux5;
+  int arrayAux1[8];
+  int arrayAux2[8];
+  int arrayAux3[8];
+  int arrayAux4[8];
+  int arrayAux5[8];
+
+  for (int i=0; i<32; i++){
+    bitAux1 = bitRead(aux1, i);
+    bitAux2 = bitRead(aux2, i);
+    bitAux3 = bitRead(aux3, i);
+    bitAux4 = bitRead(aux4, i);
+    bitAux5 = bitRead(aux5, i);
+    //Serial.print("Array 1");
+    if (i < 8){
+      arrayAux1[i] = (bitAux5 && bitAux1);
+    }else if((i >= 8) && (i < 16)){
+      arrayAux2[i-8] = (bitAux5 && bitAux2 );
+    }else if((i >= 16) && (i < 24)){
+      arrayAux3[i-16] = (bitAux5 && bitAux3 );
+    }else if((i >= 24) && (i < 32)){
+      arrayAux4[i-24] = (bitAux5 && bitAux4 );
+    }
+  }
+
+  Serial.println("Array 1");
+  for (int i=0; i<8; i++){
+    Serial.print(arrayAux1[i]);
+  }
+  Serial.println("");
+  Serial.println("Array 2");
+  for (int i=0; i<8; i++){
+    Serial.print(arrayAux2[i]);
+  }
+  Serial.println("");
+  Serial.println("Array 3");
+  for (int i=0; i<8; i++){
+    Serial.print(arrayAux3[i]);
+  }
+  Serial.println("");
+  Serial.println("Array 4");
+  for (int i=0; i<8; i++){
+    Serial.print(arrayAux4[i]);
+  }
+  Serial.println("------------------------");
+  delay(2000);
+
+  /*int bit;
+  for (int i=0; i<16; i++){
+    bit = bitRead(Esc1,i);
+    Serial.print(bit);
+    delay(3000);
+  }*/
   // Función de tiempo real
   tiempoReal();
 
@@ -119,7 +181,7 @@ void edo6(){
 // Función de Modo
 void modofunc(){
   int buttonState[CantidadBotonEntrada];
-  for (int i=0; i<CantidadBotonEntrada; i=i+1){
+  for (int i=0; i<CantidadBotonEntrada; i++){
     buttonState[i] = digitalRead(botonEntrada[i]);
     if (buttonState[i]==HIGH && i==0){
       modo = 0;
@@ -157,8 +219,8 @@ void tiempoReal(){
   if ( (currentTime - previousTime >= t) ){
     previousTime = currentTime;
     flag = 1;
-    Serial.print("Estado: ");
-    Serial.println(Estado);
+    /*Serial.print("Estado: ");
+    Serial.println(Estado);*/
   }
 }
 // Función de modo manual
