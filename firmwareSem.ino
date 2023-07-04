@@ -22,10 +22,7 @@ unsigned long EscOff = 0b00000000000000000000000000000000;
 unsigned long Esc1   = 0b10000000100000001000000010000000;
 unsigned long Esc2   = 0b00000000000011000000000000011000;
 unsigned long Esc3   = 0b00000000000000000000000000000000;
-
 unsigned long EscOn  = 0b11111111111111111111111111111111;
-
-
 
 //////////////*Void Setup*/////////////
 void setup() {
@@ -52,7 +49,7 @@ void loop() {
   // Función de tiempo real
   tiempoReal();
   
-  interfaceProg(EscOff);
+  //interfaceProg(EscOff);
 
   // Lectura de Modo
   modofunc();
@@ -60,80 +57,43 @@ void loop() {
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits
 void interfaceProg(unsigned long escenario){
+  // Variables para separar los 32 bits de entrada en grupos de 8 bits
   unsigned long aux1 = 0b00000000000000000000000011111111;
   unsigned long aux2 = 0b00000000000000001111111100000000;
   unsigned long aux3 = 0b00000000111111110000000000000000;
   unsigned long aux4 = 0b11111111000000000000000000000000;
-
-  unsigned bit, bitAux1, bitAux2, bitAux3, bitAux4, bitEsc;
+  // Arreglos para cada grupo de 8 bits
   int arrayAux1[8];
   int arrayAux2[8];
   int arrayAux3[8];
   int arrayAux4[8];
-  int arrayAux5[8];
-
+  // Variables para conversión de bits a decimal
   double array1 = 0;
   double array2 = 0;
   double array3 = 0;
-
+  // Conversión de la variable de 32 bits a arreglos de 8 bits
   for (int i=0; i<32; i++){
-    bitAux1 = bitRead(aux1, i);
-    bitAux2 = bitRead(aux2, i);
-    bitAux3 = bitRead(aux3, i);
-    bitAux4 = bitRead(aux4, i);
-    bitEsc = bitRead(escenario, i);
-    //Serial.print("Array 1");
     if (i < 8){
-      arrayAux1[i] = (bitEsc && bitAux1);
+      arrayAux1[i] = ((bitRead(escenario, i)) && (bitRead(aux1, i)));
     }else if((i >= 8) && (i < 16)){
-      arrayAux2[i-8] = (bitEsc && bitAux2 );
+      arrayAux2[i-8] = ((bitRead(escenario, i)) && (bitRead(aux2, i)) );
     }else if((i >= 16) && (i < 24)){
-      arrayAux3[i-16] = (bitEsc && bitAux3 );
+      arrayAux3[i-16] = ((bitRead(escenario, i)) && (bitRead(aux3, i)) );
     }else if((i >= 24) && (i < 32)){
-      arrayAux4[i-24] = (bitEsc && bitAux4 );
+      arrayAux4[i-24] = ((bitRead(escenario, i)) && (bitRead(aux4, i)) );
     }
   }
-
-  /*
-  Serial.println("Array 1");
-  for (int i=0; i<8; i++){
-    Serial.print(arrayAux1[i]);
-  }
-  Serial.println("");
-  Serial.println("Array 2");
-  for (int i=0; i<8; i++){
-    Serial.print(arrayAux2[i]);
-  }
-  Serial.println("");
-  Serial.println("Array 3");
-  for (int i=0; i<8; i++){
-    Serial.print(arrayAux3[i]);
-  }
-  Serial.println("");
-  Serial.println("Array 4");
-  for (int i=0; i<8; i++){
-    Serial.print(arrayAux4[i]);
-  }*/
-
+  // Arreglos de 8 bits a decimal double
   for (int i=0; i<8; i++){
     array1 = (arrayAux1[i]*(pow(2,i))) + array1;
     array2 = (arrayAux2[i]*(pow(2,i))) + array2;
     array3 = (arrayAux3[i]*(pow(2,i))) + array3;
   }
-  
+  // Conversión de decimal double a entero
   int arrayInt1 = int(round(array1));
   int arrayInt2 = int(round(array2));
   int arrayInt3 = int(round(array3));
-  /*
-  Serial.println("Array 1");
-  Serial.print(array1); Serial.println(arrayInt1);
-  Serial.println("Array 2");
-  Serial.print(array2); Serial.println(arrayInt2);
-  Serial.println("Array 3");
-  Serial.print(array3); Serial.println(arrayInt3);*/
-  
-  
-
+  // Escritura de los arreglos de 8 bits a Salida
   ledWrite(arrayInt3,arrayInt2,arrayInt1);
   //delay(5000);
 }
