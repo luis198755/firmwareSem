@@ -19,13 +19,12 @@ unsigned long te = 375;
 unsigned long t = te;
 // Variables de Programación
 unsigned long EscOff = 0b00000000000000000000000000000000;
-unsigned long Esc1 = 0b10000000100000001000000010000000;
-unsigned long Esc2 = 0b00000000000000000000000000000000;
-unsigned long Esc3 = 0b00000000000000000000000000000000;
+unsigned long Esc1   = 0b10000000100000001000000010000000;
+unsigned long Esc2   = 0b00000000000011000000000000011000;
+unsigned long Esc3   = 0b00000000000000000000000000000000;
 
-unsigned int arrayInt1 = 0;
-unsigned int arrayInt2 = 0;
-unsigned int arrayInt3 = 0;
+unsigned long EscOn  = 0b11111111111111111111111111111111;
+
 
 
 //////////////*Void Setup*/////////////
@@ -45,43 +44,53 @@ void setup() {
   /////////////////////////////////////////////////////////
 
   // Apagado de todas las fases
-  fasesOff(); delay(3000);
+  fasesOff(); delay(2000);
 }
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
+  // Función de tiempo real
+  tiempoReal();
+  
+  interfaceProg(EscOff);
+
+  // Lectura de Modo
+  modofunc();
+}
+//////////////////////*Funciones*/////////////////////////
+// Función de interface 32 a 8 bits
+void interfaceProg(unsigned long escenario){
   unsigned long aux1 = 0b00000000000000000000000011111111;
   unsigned long aux2 = 0b00000000000000001111111100000000;
   unsigned long aux3 = 0b00000000111111110000000000000000;
   unsigned long aux4 = 0b11111111000000000000000000000000;
-                      // ||||||||        
-  unsigned long aux5 = 0b00000000000010001000001010101010;
-  unsigned bit, bitAux1, bitAux2, bitAux3, bitAux4, bitAux5;
+
+  unsigned bit, bitAux1, bitAux2, bitAux3, bitAux4, bitEsc;
   int arrayAux1[8];
   int arrayAux2[8];
   int arrayAux3[8];
   int arrayAux4[8];
   int arrayAux5[8];
 
-  float array1 = 0;
-  float array2 = 0;
-  float array3 = 0;
+  double array1 = 0;
+  double array2 = 0;
+  double array3 = 0;
 
   for (int i=0; i<32; i++){
     bitAux1 = bitRead(aux1, i);
     bitAux2 = bitRead(aux2, i);
     bitAux3 = bitRead(aux3, i);
     bitAux4 = bitRead(aux4, i);
-    bitAux5 = bitRead(aux5, i);
+    bitEsc = bitRead(escenario, i);
     //Serial.print("Array 1");
     if (i < 8){
-      arrayAux1[i] = (bitAux5 && bitAux1);
+      arrayAux1[i] = (bitEsc && bitAux1);
     }else if((i >= 8) && (i < 16)){
-      arrayAux2[i-8] = (bitAux5 && bitAux2 );
+      arrayAux2[i-8] = (bitEsc && bitAux2 );
     }else if((i >= 16) && (i < 24)){
-      arrayAux3[i-16] = (bitAux5 && bitAux3 );
+      arrayAux3[i-16] = (bitEsc && bitAux3 );
     }else if((i >= 24) && (i < 32)){
-      arrayAux4[i-24] = (bitAux5 && bitAux4 );
+      arrayAux4[i-24] = (bitEsc && bitAux4 );
     }
   }
 
@@ -112,17 +121,22 @@ void loop() {
     array3 = (arrayAux3[i]*(pow(2,i))) + array3;
   }
   
-  arrayInt1 = int(array1)+1;
-  arrayInt2 = int(array2)+1;
-  arrayInt3 = int(array3)+1;
+  int arrayInt1 = int(round(array1));
+  int arrayInt2 = int(round(array2));
+  int arrayInt3 = int(round(array3));
+  /*
+  Serial.println("Array 1");
+  Serial.print(array1); Serial.println(arrayInt1);
+  Serial.println("Array 2");
+  Serial.print(array2); Serial.println(arrayInt2);
+  Serial.println("Array 3");
+  Serial.print(array3); Serial.println(arrayInt3);*/
+  
+  
 
-  // Función de tiempo real
-  tiempoReal();
-
-  // Lectura de Modo
-  modofunc();
+  ledWrite(arrayInt3,arrayInt2,arrayInt1);
+  //delay(5000);
 }
-//////////////////////*Funciones*/////////////////////////
 //Función de Estados
 void ActualizarSemaforo() {
   //Estados
@@ -161,7 +175,7 @@ void ActualizarSemaforo() {
 }
 // Apagar todas las fases
 void fasesOff(){
-    ledWrite(B00000000,B00000000,B00000000); 
+    interfaceProg(EscOff); 
 }
 // Estado 0
 void edo0(){
@@ -240,32 +254,32 @@ void tiempoReal(){
 void manual(){
   switch (edoDes){
     case 0: //
-        ledWrite(B00100100,B10010010,B01001001); //delay(375);
+        interfaceProg(Esc1);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
-            t = 100;
+            t = 2000;
         }
         break;
     case 1: //
-        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        interfaceProg(Esc2);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
-            t = 100;
+            t = 2000;
         }
         break;
   } 
 }
 // Función de modo aislado
 void aislado(){
-  ledWrite(arrayInt3,arrayInt2,arrayInt1); //delay(375);
+    interfaceProg(EscOn);
 }
 // Función de destello
 void destello(){
   switch (edoDes){
     case 0: //
-        ledWrite(B01001001,B00100100,B10010010); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -273,7 +287,7 @@ void destello(){
         }
         break;
     case 1: //
-        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -286,7 +300,7 @@ void destello(){
 void sincronizado(){
   switch (edoDes){
     case 0: //
-        ledWrite(B11111111,B11111111,B11111111); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -294,7 +308,7 @@ void sincronizado(){
         }
         break;
     case 1: //
-        ledWrite(B00000000,B00000000,B00000000); //delay(375);
+        interfaceProg(EscOn); //delay(375);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
