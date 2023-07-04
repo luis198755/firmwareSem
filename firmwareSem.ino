@@ -22,6 +22,12 @@ unsigned long EscOff = 0b00000000000000000000000000000000;
 unsigned long Esc1 = 0b10000000100000001000000010000000;
 unsigned long Esc2 = 0b00000000000000000000000000000000;
 unsigned long Esc3 = 0b00000000000000000000000000000000;
+
+unsigned int arrayInt1 = 0;
+unsigned int arrayInt2 = 0;
+unsigned int arrayInt3 = 0;
+
+
 //////////////*Void Setup*/////////////
 void setup() {
   //Inicialización del puerto serial del mCU
@@ -48,14 +54,18 @@ void loop() {
   unsigned long aux2 = 0b00000000000000001111111100000000;
   unsigned long aux3 = 0b00000000111111110000000000000000;
   unsigned long aux4 = 0b11111111000000000000000000000000;
-
-  unsigned long aux5 = 0b11111111000010001000001011110111;
+                      // ||||||||        
+  unsigned long aux5 = 0b00000000000010001000001010101010;
   unsigned bit, bitAux1, bitAux2, bitAux3, bitAux4, bitAux5;
   int arrayAux1[8];
   int arrayAux2[8];
   int arrayAux3[8];
   int arrayAux4[8];
   int arrayAux5[8];
+
+  float array1 = 0;
+  float array2 = 0;
+  float array3 = 0;
 
   for (int i=0; i<32; i++){
     bitAux1 = bitRead(aux1, i);
@@ -75,6 +85,7 @@ void loop() {
     }
   }
 
+  /*
   Serial.println("Array 1");
   for (int i=0; i<8; i++){
     Serial.print(arrayAux1[i]);
@@ -93,16 +104,18 @@ void loop() {
   Serial.println("Array 4");
   for (int i=0; i<8; i++){
     Serial.print(arrayAux4[i]);
-  }
-  Serial.println("------------------------");
-  delay(2000);
-
-  /*int bit;
-  for (int i=0; i<16; i++){
-    bit = bitRead(Esc1,i);
-    Serial.print(bit);
-    delay(3000);
   }*/
+
+  for (int i=0; i<8; i++){
+    array1 = (arrayAux1[i]*(pow(2,i))) + array1;
+    array2 = (arrayAux2[i]*(pow(2,i))) + array2;
+    array3 = (arrayAux3[i]*(pow(2,i))) + array3;
+  }
+  
+  arrayInt1 = int(array1)+1;
+  arrayInt2 = int(array2)+1;
+  arrayInt3 = int(array3)+1;
+
   // Función de tiempo real
   tiempoReal();
 
@@ -246,7 +259,7 @@ void manual(){
 }
 // Función de modo aislado
 void aislado(){
-  ledWrite(B11111111,B00000000,B11111111); //delay(375);
+  ledWrite(arrayInt3,arrayInt2,arrayInt1); //delay(375);
 }
 // Función de destello
 void destello(){
