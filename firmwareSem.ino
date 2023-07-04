@@ -16,12 +16,34 @@ int modo = 0;
 //Variable de control del Timer (millis)
 unsigned long previousTime = 0;
 unsigned long te = 375;
-unsigned long t = te;
+unsigned long t = 5000;
 // Variables de Programación
-unsigned long EscOff = 0b00000000000000000000000000000000;
-unsigned long Esc1   = 0b10000000100000001000000010000000;
-unsigned long Esc2   = 0b00000000000011000000000000011000;
-unsigned long Esc3   = 0b00000000000000000000000000000000;
+unsigned long EscOff  = 0b00000000000000000000000000000000;
+
+unsigned long Esc1    = 0b00000000000000100100100100001001; // Escenario 1
+
+unsigned long Esc1_1  = 0b00000000000000000000000100001001;
+unsigned long Esc1_2  = 0b00000000000000100100100100001001;
+unsigned long Esc1_3  = 0b00000000000000000000000100001001;
+unsigned long Esc1_4  = 0b00000000000000100100100100001001;
+unsigned long Esc1_5  = 0b00000000000000010010010100001001;
+
+unsigned long Esc2    = 0b00000000000000001001001100001100; // Escenario 2
+
+unsigned long Esc2_1  = 0b00000000000000001001001000001000;
+unsigned long Esc2_2  = 0b00000000000000001001001100001100;
+unsigned long Esc2_3  = 0b00000000000000001001001000001000;
+unsigned long Esc2_4  = 0b00000000000000001001001100001100;
+unsigned long Esc2_5  = 0b00000000000000001001001010001010;
+
+unsigned long Esc3    = 0b00000000000000001001100001100001; // Escenario 3
+
+unsigned long Esc3_1  = 0b00000000000000001001100001000001;
+unsigned long Esc3_2  = 0b00000000000000001001100001100001;
+unsigned long Esc3_3  = 0b00000000000000001001100001000001;
+unsigned long Esc3_4  = 0b00000000000000001001100001100001;
+unsigned long Esc3_5  = 0b00000000000000001001100001010001;
+
 unsigned long EscOn  = 0b11111111111111111111111111111111;
 
 //////////////*Void Setup*/////////////
@@ -226,14 +248,160 @@ void manual(){
         if (flag == 1){
             edoDes = 0;
             flag = 0;
-            t = 2000;
+            t = 1000;
         }
         break;
+  
   } 
 }
 // Función de modo aislado
 void aislado(){
-    interfaceProg(EscOn);
+  switch (edoDes){
+    case 0: //
+        interfaceProg(Esc1);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 1: //
+        interfaceProg(Esc1_1);
+        if (flag == 1){
+            edoDes = 2;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 2: //
+        interfaceProg(Esc1_2);
+        if (flag == 1){
+            edoDes = 3;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 3: //
+        interfaceProg(Esc1_3);
+        if (flag == 1){
+            edoDes = 4;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 4: //
+        interfaceProg(Esc1_4);
+        if (flag == 1){
+            edoDes = 5;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 5: //
+        interfaceProg(Esc1_5);
+        if (flag == 1){
+            edoDes = 6;
+            flag = 0;
+            t = 2000;
+        }
+        break;
+    case 6: //
+        interfaceProg(Esc2);
+        if (flag == 1){
+            edoDes = 7;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 7: //
+        interfaceProg(Esc2_1);
+        if (flag == 1){
+            edoDes = 8;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 8: //
+        interfaceProg(Esc2_2);
+        if (flag == 1){
+            edoDes = 9;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 9: //
+        interfaceProg(Esc2_3);
+        if (flag == 1){
+            edoDes = 10;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 10: //
+        interfaceProg(Esc2_4);
+        if (flag == 1){
+            edoDes = 11;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 11: //
+        interfaceProg(Esc2_5);
+        if (flag == 1){
+            edoDes = 12;
+            flag = 0;
+            t = 2000;
+        }
+        break;
+    case 12: //
+        interfaceProg(Esc3);
+        if (flag == 1){
+            edoDes = 13;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 13: //
+        interfaceProg(Esc3_1);
+        if (flag == 1){
+            edoDes = 14;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 14: //
+        interfaceProg(Esc3_2);
+        if (flag == 1){
+            edoDes = 15;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 15: //
+        interfaceProg(Esc3_3);
+        if (flag == 1){
+            edoDes = 16;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 16: //
+        interfaceProg(Esc3_4);
+        if (flag == 1){
+            edoDes = 17;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 17: //
+        interfaceProg(Esc3_5);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 5000;
+        }
+        break;
+  } 
 }
 // Función de destello
 void destello(){
