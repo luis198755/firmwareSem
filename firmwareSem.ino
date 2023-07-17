@@ -16,12 +16,44 @@ int modo = 0;
 //Variable de control del Timer (millis)
 unsigned long previousTime = 0;
 unsigned long te = 375;
-unsigned long t = te;
+unsigned long t = 10000;
 // Variables de Programación
-unsigned long EscOff = 0b00000000000000000000000000000000;
-unsigned long Esc1   = 0b10000000100000001000000010000000;
-unsigned long Esc2   = 0b00000000000011000000000000011000;
-unsigned long Esc3   = 0b00000000000000000000000000000000;
+unsigned long EscOff  = 0b00000000000000000000000000000000;
+//////////////////////////////////////*Programación*//////////////////////////////////////////
+unsigned long Esc1    = 0b00000000000000100100100100001001; // ***Escenario 1***
+unsigned long Esc1_1  = 0b00000000000000000000000100001001; // Transisción de Verde
+unsigned long Esc1_2  = 0b00000000000000100100100100001001; // Transisción de Verde
+unsigned long Esc1_3  = 0b00000000000000000000000100001001; // Transisción de Verde
+unsigned long Esc1_4  = 0b00000000000000100100100100001001; // Transisción de Verde
+unsigned long Esc1_5  = 0b00000000000000000000000100001001; // Transisción de Verde
+unsigned long Esc1_6  = 0b00000000000000100100100100001001; // Transisción de Verde
+unsigned long Esc1_7  = 0b00000000000000000000000100001001; // Transisción de Verde
+unsigned long Esc1_8  = 0b00000000000000100100100100001001; // Transisción de Verde
+unsigned long Esc1_9  = 0b00000000000000010010010100001001; // Tiempo de ambar
+//////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long Esc2    = 0b00000000000000001001001100001100; // ***Escenario 2***
+unsigned long Esc2_1  = 0b00000000000000001001001000001000; // Transisción de Verde
+unsigned long Esc2_2  = 0b00000000000000001001001100001100; // Transisción de Verde
+unsigned long Esc2_3  = 0b00000000000000001001001000001000; // Transisción de Verde
+unsigned long Esc2_4  = 0b00000000000000001001001100001100; // Transisción de Verde
+unsigned long Esc2_5  = 0b00000000000000001001001000001000; // Transisción de Verde
+unsigned long Esc2_6  = 0b00000000000000001001001100001100; // Transisción de Verde
+unsigned long Esc2_7  = 0b00000000000000001001001000001000; // Transisción de Verde
+unsigned long Esc2_8  = 0b00000000000000001001001100001100; // Transisción de Verde
+unsigned long Esc2_9  = 0b00000000000000001001001010001010; // Tiempo de ambar
+//////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long Esc3    = 0b00000000000000001001100001100001; // ***Escenario 3***
+unsigned long Esc3_1  = 0b00000000000000001001100001000001; // Transisción de Verde
+unsigned long Esc3_2  = 0b00000000000000001001100001100001; // Transisción de Verde
+unsigned long Esc3_3  = 0b00000000000000001001100001000001; // Transisción de Verde
+unsigned long Esc3_4  = 0b00000000000000001001100001100001; // Transisción de Verde
+unsigned long Esc3_5  = 0b00000000000000001001100001000001; // Transisción de Verde
+unsigned long Esc3_6  = 0b00000000000000001001100001100001; // Transisción de Verde
+unsigned long Esc3_7  = 0b00000000000000001001100001000001; // Transisción de Verde
+unsigned long Esc3_8  = 0b00000000000000001001100001100001; // Transisción de Verde
+unsigned long Esc3_9  = 0b00000000000000001001100001010001; // Tiempo de ambar
+///////////////////////////////////*FIN Programación*//////////////////////////////////////////
+
 unsigned long EscOn  = 0b11111111111111111111111111111111;
 
 //////////////*Void Setup*/////////////
@@ -226,14 +258,256 @@ void manual(){
         if (flag == 1){
             edoDes = 0;
             flag = 0;
-            t = 2000;
+            t = 1000;
         }
         break;
+  
   } 
 }
 // Función de modo aislado
 void aislado(){
-    interfaceProg(EscOn);
+  switch (edoDes){
+    case 0: //
+        interfaceProg(Esc1);
+        if (flag == 1){
+            edoDes = 1;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 1: //
+        interfaceProg(Esc1_1);
+        if (flag == 1){
+            edoDes = 2;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 2: //
+        interfaceProg(Esc1_2);
+        if (flag == 1){
+            edoDes = 3;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 3: //
+        interfaceProg(Esc1_3);
+        if (flag == 1){
+            edoDes = 4;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 4: //
+        interfaceProg(Esc1_4);
+        if (flag == 1){
+            edoDes = 5;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 5: //
+        interfaceProg(Esc1_5);
+        if (flag == 1){
+            edoDes = 6;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 6: //
+        interfaceProg(Esc1_6);
+        if (flag == 1){
+            edoDes = 7;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 7: //
+        interfaceProg(Esc1_7);
+        if (flag == 1){
+            edoDes = 8;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 8: //
+        interfaceProg(Esc1_8);
+        if (flag == 1){
+            edoDes = 9;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 9: //
+        interfaceProg(Esc1_9);
+        if (flag == 1){
+            edoDes = 10;
+            flag = 0;
+            t = 10000;
+        }
+        break;
+    case 10: //
+        interfaceProg(Esc2);
+        if (flag == 1){
+            edoDes = 11;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 11: //
+        interfaceProg(Esc2_1);
+        if (flag == 1){
+            edoDes = 12;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 12: //
+        interfaceProg(Esc2_2);
+        if (flag == 1){
+            edoDes = 13;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 13: //
+        interfaceProg(Esc2_3);
+        if (flag == 1){
+            edoDes = 14;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 14: //
+        interfaceProg(Esc2_4);
+        if (flag == 1){
+            edoDes = 15;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 15: //
+        interfaceProg(Esc2_5);
+        if (flag == 1){
+            edoDes = 16;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 16: //
+        interfaceProg(Esc2_6);
+        if (flag == 1){
+            edoDes = 17;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 17: //
+        interfaceProg(Esc2_7);
+        if (flag == 1){
+            edoDes = 18;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 18: //
+        interfaceProg(Esc2_8);
+        if (flag == 1){
+            edoDes = 19;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 19: //
+        interfaceProg(Esc2_9);
+        if (flag == 1){
+            edoDes = 20;
+            flag = 0;
+            t = 10000;
+        }
+        break;
+    case 20: //
+        interfaceProg(Esc3);
+        if (flag == 1){
+            edoDes = 21;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 21: //
+        interfaceProg(Esc3_1);
+        if (flag == 1){
+            edoDes = 22;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 22: //
+        interfaceProg(Esc3_2);
+        if (flag == 1){
+            edoDes = 23;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 23: //
+        interfaceProg(Esc3_3);
+        if (flag == 1){
+            edoDes = 24;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 24: //
+        interfaceProg(Esc3_4);
+        if (flag == 1){
+            edoDes = 25;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 25: //
+        interfaceProg(Esc3_5);
+        if (flag == 1){
+            edoDes = 26;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 26: //
+        interfaceProg(Esc3_6);
+        if (flag == 1){
+            edoDes = 27;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 27: //
+        interfaceProg(Esc3_7);
+        if (flag == 1){
+            edoDes = 28;
+            flag = 0;
+            t = 375;
+        }
+        break;
+    case 28: //
+        interfaceProg(Esc3_8);
+        if (flag == 1){
+            edoDes = 29;
+            flag = 0;
+            t = 3000;
+        }
+        break;
+    case 29: //
+        interfaceProg(Esc3_9);
+        if (flag == 1){
+            edoDes = 0;
+            flag = 0;
+            t = 10000;
+        }
+        break;
+  } 
 }
 // Función de destello
 void destello(){
