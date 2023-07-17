@@ -19,6 +19,7 @@ unsigned long te = 375;
 unsigned long t = 10000;
 // Variables de Programación
 unsigned long EscOff  = 0b00000000000000000000000000000000;
+unsigned long EscOn   = 0b11111111111111111111111111111111;
 //////////////////////////////////////*Programación*//////////////////////////////////////////
 unsigned long Esc1    = 0b00000000000000100100100100001001; // ***Escenario 1***
 unsigned long Esc1_1  = 0b00000000000000000000000100001001; // Transisción de Verde
@@ -53,8 +54,6 @@ unsigned long Esc3_7  = 0b00000000000000001001100001000001; // Transisción de V
 unsigned long Esc3_8  = 0b00000000000000001001100001100001; // Transisción de Verde
 unsigned long Esc3_9  = 0b00000000000000001001100001010001; // Tiempo de ambar
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
-
-unsigned long EscOn  = 0b11111111111111111111111111111111;
 
 //////////////*Void Setup*/////////////
 void setup() {
@@ -204,13 +203,21 @@ void modofunc(){
     buttonState[i] = digitalRead(botonEntrada[i]);
     if (buttonState[i]==HIGH && i==0){
       modo = 0;
+      edoDes = 0;
+      t = 100;
     }
     else if (buttonState[i]==HIGH && i==1){
       modo = 1;
+      edoDes = 0;
+      t = 100;
     }else if (buttonState[i]==HIGH && i==2){
       modo = 2;
+      edoDes = 0;
+      t = 100;
     }else if (buttonState[i]==HIGH && i==3){
       modo = 3;
+      edoDes = 0;
+      t = 100;
     }
   }
   // Modos de funcionamiento
@@ -246,15 +253,15 @@ void tiempoReal(){
 void manual(){
   switch (edoDes){
     case 0: //
-        interfaceProg(Esc1);
+        interfaceProg(EscOff);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
-            t = 2000;
+            t = 1000;
         }
         break;
     case 1: //
-        interfaceProg(Esc2);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
