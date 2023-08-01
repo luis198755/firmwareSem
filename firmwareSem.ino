@@ -18,41 +18,48 @@ unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
 // Variables de Programación
-unsigned long EscOff  = 0b00000000000000000000000000000000;
-unsigned long EscOn   = 0b11111111111111111111111111111111;
+int escOff[24] =  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0}; // Todo Apagado
+int escOn[24] =   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0}; // Todo Encendido
 //////////////////////////////////////*Programación*//////////////////////////////////////////
-unsigned long Esc1    = 0b00000000000000100100100100001001; // ***Escenario 1***
-unsigned long Esc1_1  = 0b00000000000000000000000100001001; // Transisción de Verde
-unsigned long Esc1_2  = 0b00000000000000100100100100001001; // Transisción de Verde
-unsigned long Esc1_3  = 0b00000000000000000000000100001001; // Transisción de Verde
-unsigned long Esc1_4  = 0b00000000000000100100100100001001; // Transisción de Verde
-unsigned long Esc1_5  = 0b00000000000000000000000100001001; // Transisción de Verde
-unsigned long Esc1_6  = 0b00000000000000100100100100001001; // Transisción de Verde
-unsigned long Esc1_7  = 0b00000000000000000000000100001001; // Transisción de Verde
-unsigned long Esc1_8  = 0b00000000000000100100100100001001; // Transisción de Verde
-unsigned long Esc1_9  = 0b00000000000000010010010100001001; // Tiempo de ambar
+int esc1[24] =    {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // ***Escenario 1***
+int esc1_1[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_2[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_3[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_4[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_5[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_6[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_7[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_8[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc1_9[24] =  {0,1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
 //////////////////////////////////////////////////////////////////////////////////////////////
-unsigned long Esc2    = 0b00000000000000001001001100001100; // ***Escenario 2***
-unsigned long Esc2_1  = 0b00000000000000001001001000001000; // Transisción de Verde
-unsigned long Esc2_2  = 0b00000000000000001001001100001100; // Transisción de Verde
-unsigned long Esc2_3  = 0b00000000000000001001001000001000; // Transisción de Verde
-unsigned long Esc2_4  = 0b00000000000000001001001100001100; // Transisción de Verde
-unsigned long Esc2_5  = 0b00000000000000001001001000001000; // Transisción de Verde
-unsigned long Esc2_6  = 0b00000000000000001001001100001100; // Transisción de Verde
-unsigned long Esc2_7  = 0b00000000000000001001001000001000; // Transisción de Verde
-unsigned long Esc2_8  = 0b00000000000000001001001100001100; // Transisción de Verde
-unsigned long Esc2_9  = 0b00000000000000001001001010001010; // Tiempo de ambar
+int esc2[24] =    {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // ***Escenario 2***
+int esc2_1[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_2[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_3[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_4[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_5[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_6[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_7[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_8[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
+int esc2_9[24] =  {0,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,0, 0,0,0,0,0,0}; // Tiempo de ambar
 //////////////////////////////////////////////////////////////////////////////////////////////
-unsigned long Esc3    = 0b00000000000000001001100001100001; // ***Escenario 3***
-unsigned long Esc3_1  = 0b00000000000000001001100001000001; // Transisción de Verde
-unsigned long Esc3_2  = 0b00000000000000001001100001100001; // Transisción de Verde
-unsigned long Esc3_3  = 0b00000000000000001001100001000001; // Transisción de Verde
-unsigned long Esc3_4  = 0b00000000000000001001100001100001; // Transisción de Verde
-unsigned long Esc3_5  = 0b00000000000000001001100001000001; // Transisción de Verde
-unsigned long Esc3_6  = 0b00000000000000001001100001100001; // Transisción de Verde
-unsigned long Esc3_7  = 0b00000000000000001001100001000001; // Transisción de Verde
-unsigned long Esc3_8  = 0b00000000000000001001100001100001; // Transisción de Verde
-unsigned long Esc3_9  = 0b00000000000000001001100001010001; // Tiempo de ambar
+int esc3[24] =    {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_1[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_2[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_3[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_4[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_5[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_6[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_7[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_8[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+int esc3_9[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1, 0,0,0,0,0,0}; // Tiempo de ambar
+//////////////////////////////////////////////////////////////////////////////////////////////
+int outputArray1[8];
+int outputArray2[8];
+int outputArray3[8];
+int outputArray4[8];
+int size = sizeof(outputArray1) / sizeof(outputArray1[0]);
+
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
 
 //////////////*Void Setup*/////////////
@@ -70,7 +77,7 @@ void setup() {
     pinMode(botonEntrada[i], INPUT);
   }
   /////////////////////////////////////////////////////////
-
+  
   // Apagado de todas las fases
   fasesOff(); delay(2000);
 }
@@ -81,52 +88,57 @@ void loop() {
   tiempoReal();
   
   //interfaceProg(EscOff);
+  interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size);
+  
+  //interfaceProg2(esc1,outputArray1,outputArray2,outputArray3,size);
+  /*Serial.print("Output Array 1: ");
+  for (int i = 0; i < 8; i++) {
+      Serial.print(outputArray1[i]);
+      //Serial.print(" ");
+  }
+  Serial.println(" ");
+  Serial.print("Output Array 2: ");
+  for (int i = 0; i < 8; i++) {
+      Serial.print(outputArray2[i]);
+      //Serial.print(" ");
+  }
+  Serial.println(" ");
+  Serial.print("Output Array 3: ");
+  for (int i = 0; i < 8; i++) {
+      Serial.print(outputArray3[i]);
+      //Serial.print(" ");
+  }
+  Serial.println(" ");*/
 
   // Lectura de Modo
   modofunc();
 }
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits
-void interfaceProg(unsigned long escenario){
-  // Variables para separar los 32 bits de entrada en grupos de 8 bits
-  unsigned long aux1 = 0b00000000000000000000000011111111;
-  unsigned long aux2 = 0b00000000000000001111111100000000;
-  unsigned long aux3 = 0b00000000111111110000000000000000;
-  unsigned long aux4 = 0b11111111000000000000000000000000;
-  // Arreglos para cada grupo de 8 bits
-  int arrayAux1[8];
-  int arrayAux2[8];
-  int arrayAux3[8];
-  int arrayAux4[8];
-  // Variables para conversión de bits a decimal
-  double array1 = 0;
-  double array2 = 0;
-  double array3 = 0;
-  // Conversión de la variable de 32 bits a arreglos de 8 bits
-  for (int i=0; i<32; i++){
-    if (i < 8){
-      arrayAux1[i] = ((bitRead(escenario, i)) && (bitRead(aux1, i)));
-    }else if((i >= 8) && (i < 16)){
-      arrayAux2[i-8] = ((bitRead(escenario, i)) && (bitRead(aux2, i)) );
-    }else if((i >= 16) && (i < 24)){
-      arrayAux3[i-16] = ((bitRead(escenario, i)) && (bitRead(aux3, i)) );
-    }else if((i >= 24) && (i < 32)){
-      arrayAux4[i-24] = ((bitRead(escenario, i)) && (bitRead(aux4, i)) );
+void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* outputArray3, int size) {
+    for (int i = 0; i < 8; i++) {
+        outputArray1[i] = inputArray[i];
+        outputArray2[i] = inputArray[i + 8];
+        outputArray3[i] = inputArray[i + 16];
     }
+    /*
+  	Serial.println(size);
+  	Serial.println("");
+    Serial.println(binaryArrayToInt(outputArray1,size));
+  	Serial.println(binaryArrayToInt(outputArray2,size));
+  	Serial.println(binaryArrayToInt(outputArray3,size));*/
+  	// Escritura de los arreglos de 8 bits a Salida
+  	
+    ledWrite(binaryArrayToInt(outputArray1,size),binaryArrayToInt(outputArray2,size),binaryArrayToInt(outputArray3,size));
+    
+}
+
+unsigned long int binaryArrayToInt(int* binaryArray, int size) {
+  unsigned long int result = 0;
+  for (int i = 0; i < size; i++) {
+    result = result * 2 + binaryArray[i];
   }
-  // Arreglos de 8 bits a decimal double
-  for (int i=0; i<8; i++){
-    array1 = (arrayAux1[i]*(pow(2,i))) + array1;
-    array2 = (arrayAux2[i]*(pow(2,i))) + array2;
-    array3 = (arrayAux3[i]*(pow(2,i))) + array3;
-  }
-  // Conversión de decimal double a entero
-  int arrayInt1 = int(round(array1));
-  int arrayInt2 = int(round(array2));
-  int arrayInt3 = int(round(array3));
-  // Escritura de los arreglos de 8 bits a Salida
-  ledWrite(arrayInt3,arrayInt2,arrayInt1);
-  //delay(5000);
+  return result;
 }
 //Función de Estados
 void ActualizarSemaforo() {
@@ -166,7 +178,7 @@ void ActualizarSemaforo() {
 }
 // Apagar todas las fases
 void fasesOff(){
-    interfaceProg(EscOff); 
+    interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); 
 }
 // Estado 0
 void edo0(){
@@ -253,7 +265,7 @@ void tiempoReal(){
 void manual(){
   switch (edoDes){
     case 0: //
-        interfaceProg(EscOff);
+        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -261,7 +273,7 @@ void manual(){
         }
         break;
     case 1: //
-        interfaceProg(EscOn);
+        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -275,7 +287,7 @@ void manual(){
 void aislado(){
   switch (edoDes){
     case 0: //
-        interfaceProg(Esc1);
+        interfaceProg2(esc1,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -283,7 +295,7 @@ void aislado(){
         }
         break;
     case 1: //
-        interfaceProg(Esc1_1);
+        interfaceProg2(esc1_1,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 2;
             flag = 0;
@@ -291,7 +303,7 @@ void aislado(){
         }
         break;
     case 2: //
-        interfaceProg(Esc1_2);
+        interfaceProg2(esc1_2,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 3;
             flag = 0;
@@ -299,7 +311,7 @@ void aislado(){
         }
         break;
     case 3: //
-        interfaceProg(Esc1_3);
+        interfaceProg2(esc1_3,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 4;
             flag = 0;
@@ -307,7 +319,7 @@ void aislado(){
         }
         break;
     case 4: //
-        interfaceProg(Esc1_4);
+        interfaceProg2(esc1_4,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 5;
             flag = 0;
@@ -315,7 +327,7 @@ void aislado(){
         }
         break;
     case 5: //
-        interfaceProg(Esc1_5);
+        interfaceProg2(esc1_5,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 6;
             flag = 0;
@@ -323,7 +335,7 @@ void aislado(){
         }
         break;
     case 6: //
-        interfaceProg(Esc1_6);
+        interfaceProg2(esc1_6,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 7;
             flag = 0;
@@ -331,7 +343,7 @@ void aislado(){
         }
         break;
     case 7: //
-        interfaceProg(Esc1_7);
+        interfaceProg2(esc1_7,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 8;
             flag = 0;
@@ -339,7 +351,7 @@ void aislado(){
         }
         break;
     case 8: //
-        interfaceProg(Esc1_8);
+        interfaceProg2(esc1_8,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 9;
             flag = 0;
@@ -347,7 +359,7 @@ void aislado(){
         }
         break;
     case 9: //
-        interfaceProg(Esc1_9);
+        interfaceProg2(esc1_9,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 10;
             flag = 0;
@@ -355,7 +367,7 @@ void aislado(){
         }
         break;
     case 10: //
-        interfaceProg(Esc2);
+        interfaceProg2(esc2,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 11;
             flag = 0;
@@ -363,7 +375,7 @@ void aislado(){
         }
         break;
     case 11: //
-        interfaceProg(Esc2_1);
+        interfaceProg2(esc2_1,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 12;
             flag = 0;
@@ -371,7 +383,7 @@ void aislado(){
         }
         break;
     case 12: //
-        interfaceProg(Esc2_2);
+        interfaceProg2(esc2_2,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 13;
             flag = 0;
@@ -379,7 +391,7 @@ void aislado(){
         }
         break;
     case 13: //
-        interfaceProg(Esc2_3);
+        interfaceProg2(esc2_3,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 14;
             flag = 0;
@@ -387,7 +399,7 @@ void aislado(){
         }
         break;
     case 14: //
-        interfaceProg(Esc2_4);
+        interfaceProg2(esc2_4,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 15;
             flag = 0;
@@ -395,7 +407,7 @@ void aislado(){
         }
         break;
     case 15: //
-        interfaceProg(Esc2_5);
+        interfaceProg2(esc2_5,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 16;
             flag = 0;
@@ -403,7 +415,7 @@ void aislado(){
         }
         break;
     case 16: //
-        interfaceProg(Esc2_6);
+        interfaceProg2(esc2_6,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 17;
             flag = 0;
@@ -411,7 +423,7 @@ void aislado(){
         }
         break;
     case 17: //
-        interfaceProg(Esc2_7);
+        interfaceProg2(esc2_7,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 18;
             flag = 0;
@@ -419,7 +431,7 @@ void aislado(){
         }
         break;
     case 18: //
-        interfaceProg(Esc2_8);
+        interfaceProg2(esc2_8,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 19;
             flag = 0;
@@ -427,7 +439,7 @@ void aislado(){
         }
         break;
     case 19: //
-        interfaceProg(Esc2_9);
+        interfaceProg2(esc2_9,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 20;
             flag = 0;
@@ -435,7 +447,7 @@ void aislado(){
         }
         break;
     case 20: //
-        interfaceProg(Esc3);
+        interfaceProg2(esc3,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 21;
             flag = 0;
@@ -443,7 +455,7 @@ void aislado(){
         }
         break;
     case 21: //
-        interfaceProg(Esc3_1);
+        interfaceProg2(esc3_1,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 22;
             flag = 0;
@@ -451,7 +463,7 @@ void aislado(){
         }
         break;
     case 22: //
-        interfaceProg(Esc3_2);
+        interfaceProg2(esc3_2,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 23;
             flag = 0;
@@ -459,7 +471,7 @@ void aislado(){
         }
         break;
     case 23: //
-        interfaceProg(Esc3_3);
+        interfaceProg2(esc3_3,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 24;
             flag = 0;
@@ -467,7 +479,7 @@ void aislado(){
         }
         break;
     case 24: //
-        interfaceProg(Esc3_4);
+        interfaceProg2(esc3_4,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 25;
             flag = 0;
@@ -475,7 +487,7 @@ void aislado(){
         }
         break;
     case 25: //
-        interfaceProg(Esc3_5);
+        interfaceProg2(esc3_5,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 26;
             flag = 0;
@@ -483,7 +495,7 @@ void aislado(){
         }
         break;
     case 26: //
-        interfaceProg(Esc3_6);
+        interfaceProg2(esc3_6,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 27;
             flag = 0;
@@ -491,7 +503,7 @@ void aislado(){
         }
         break;
     case 27: //
-        interfaceProg(Esc3_7);
+        interfaceProg2(esc3_7,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 28;
             flag = 0;
@@ -499,7 +511,7 @@ void aislado(){
         }
         break;
     case 28: //
-        interfaceProg(Esc3_8);
+        interfaceProg2(esc3_8,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 29;
             flag = 0;
@@ -507,7 +519,7 @@ void aislado(){
         }
         break;
     case 29: //
-        interfaceProg(Esc3_9);
+        interfaceProg2(esc3_9,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -520,7 +532,7 @@ void aislado(){
 void destello(){
   switch (edoDes){
     case 0: //
-        interfaceProg(EscOff); //delay(375);
+        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -528,7 +540,7 @@ void destello(){
         }
         break;
     case 1: //
-        interfaceProg(EscOn);
+        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -541,7 +553,7 @@ void destello(){
 void sincronizado(){
   switch (edoDes){
     case 0: //
-        interfaceProg(EscOff); //delay(375);
+        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -549,7 +561,7 @@ void sincronizado(){
         }
         break;
     case 1: //
-        interfaceProg(EscOn); //delay(375);
+        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size); //delay(375);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
