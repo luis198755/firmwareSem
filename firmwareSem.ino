@@ -86,29 +86,6 @@ void loop() {
   // Declaración de variables locales
   // Función de tiempo real
   tiempoReal();
-  
-  //interfaceProg(EscOff);
-  interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size);
-  
-  //interfaceProg2(esc1,outputArray1,outputArray2,outputArray3,size);
-  /*Serial.print("Output Array 1: ");
-  for (int i = 0; i < 8; i++) {
-      Serial.print(outputArray1[i]);
-      //Serial.print(" ");
-  }
-  Serial.println(" ");
-  Serial.print("Output Array 2: ");
-  for (int i = 0; i < 8; i++) {
-      Serial.print(outputArray2[i]);
-      //Serial.print(" ");
-  }
-  Serial.println(" ");
-  Serial.print("Output Array 3: ");
-  for (int i = 0; i < 8; i++) {
-      Serial.print(outputArray3[i]);
-      //Serial.print(" ");
-  }
-  Serial.println(" ");*/
 
   // Lectura de Modo
   modofunc();
