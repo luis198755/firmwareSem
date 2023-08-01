@@ -105,8 +105,11 @@ void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* 
   	Serial.println(binaryArrayToInt(outputArray2,size));
   	Serial.println(binaryArrayToInt(outputArray3,size));*/
   	// Escritura de los arreglos de 8 bits a Salida
+  	int dig0 = binaryArrayToInt(outputArray1,size);
+  	int dig1 = binaryArrayToInt(outputArray2,size);
+    int dig2 = binaryArrayToInt(outputArray3,size);
   	
-    ledWrite(binaryArrayToInt(outputArray1,size),binaryArrayToInt(outputArray2,size),binaryArrayToInt(outputArray3,size));
+    ledWrite(dig0,dig1,dig2);
     
 }
 
