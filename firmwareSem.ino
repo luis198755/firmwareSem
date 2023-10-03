@@ -18,6 +18,42 @@ unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
 // Variables de Programación
+unsigned long EscOn   = 0b11111111111111111111111111111111;
+unsigned long EscOff  = 0b00000000000000000000000000000000;
+//////////////////////////////////////*Programación*//////////////////////////////////////////
+unsigned long esce1   = 0b10010010010000100100000000000000; // ***Escenario 1***
+unsigned long esce1_1 = 0b00000000010000100100000000000000;
+unsigned long esce1_2 = 0b10010010010000100100000000000000;
+unsigned long esce1_3 = 0b00000000010000100100000000000000;
+unsigned long esce1_4 = 0b10010010010000100100000000000000;
+unsigned long esce1_5 = 0b00000000010000100100000000000000;
+unsigned long esce1_6 = 0b10010010010000100100000000000000;
+unsigned long esce1_7 = 0b00000000010000100100000000000000;
+unsigned long esce1_8 = 0b10010010010000100100000000000000;
+unsigned long esce1_9 = 0b01001001010000100100000000000000;
+//////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long esce2   = 0b00100100110000110000000000000000; // ***Escenario 2***
+unsigned long esce2_1 = 0b00100100100000100000000000000000;
+unsigned long esce2_2 = 0b00100100110000110000000000000000;
+unsigned long esce2_3 = 0b00100100100000100000000000000000;
+unsigned long esce2_4 = 0b00100100110000110000000000000000;
+unsigned long esce2_5 = 0b00100100100000100000000000000000;
+unsigned long esce2_6 = 0b00100100110000110000000000000000;
+unsigned long esce2_7 = 0b00100100100000100000000000000000;
+unsigned long esce2_8 = 0b00100100110000110000000000000000;
+unsigned long esce2_9 = 0b00100100101000101000000000000000;
+//////////////////////////////////////////////////////////////////////////////////////////////
+unsigned long esce3   = 0b00100110000110000100000000000000;// ***Escenario 3***
+unsigned long esce3_1 = 0b00100110000100000100000000000000;
+unsigned long esce3_2 = 0b00100110000110000100000000000000;
+unsigned long esce3_3 = 0b00100110000100000100000000000000;
+unsigned long esce3_4 = 0b00100110000110000100000000000000;
+unsigned long esce3_5 = 0b00100110000100000100000000000000;
+unsigned long esce3_6 = 0b00100110000110000100000000000000;
+unsigned long esce3_7 = 0b00100110000100000100000000000000;
+unsigned long esce3_8 = 0b00100110000110000100000000000000;
+unsigned long esce3_9 = 0b00100110000101000100000000000000;
+// Variables de Programación
 int escOff[24] =  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0}; // Todo Apagado
 int escOn[24] =   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0}; // Todo Encendido
 //////////////////////////////////////*Programación*//////////////////////////////////////////
@@ -87,10 +123,24 @@ void loop() {
   // Función de tiempo real
   tiempoReal();
 
+  //interfaceProg(esce1);
+  //delay(1000);
+  //interfaceProg(esce1_1);
+  //delay(1000);
+
   // Lectura de Modo
   modofunc();
 }
 //////////////////////*Funciones*/////////////////////////
+// Función de interface 32 8 bits - en base a variables
+void interfaceProg(unsigned long var32Bits) {
+    unsigned char var1 = (var32Bits & 0xFF);
+    unsigned char var2 = ((var32Bits >> 8) & 0xFF);
+    unsigned char var3 = ((var32Bits >> 16) & 0xFF);
+    unsigned char var4 = ((var32Bits >> 24) & 0xFF);
+
+    ledWrite(var1,var2,var3,var4);
+}
 // Función de interface 32 a 8 bits
 void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* outputArray3, int size) {
     for (int i = 0; i < 8; i++) {
@@ -109,7 +159,7 @@ void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* 
   	int dig1 = binaryArrayToInt(outputArray2,size);
     int dig2 = binaryArrayToInt(outputArray3,size);
   	
-    ledWrite(dig0,dig1,dig2);
+    //ledWrite(dig0,dig1,dig2);
     
 }
 
@@ -158,7 +208,7 @@ void ActualizarSemaforo() {
 }
 // Apagar todas las fases
 void fasesOff(){
-    interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); 
+    interfaceProg(EscOff); 
 }
 // Estado 0
 void edo0(){
@@ -245,7 +295,7 @@ void tiempoReal(){
 void manual(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOff);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -253,7 +303,7 @@ void manual(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -267,7 +317,7 @@ void manual(){
 void aislado(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(esc1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -275,7 +325,7 @@ void aislado(){
         }
         break;
     case 1: //
-        interfaceProg2(esc1_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_1);
         if (flag == 1){
             edoDes = 2;
             flag = 0;
@@ -283,7 +333,7 @@ void aislado(){
         }
         break;
     case 2: //
-        interfaceProg2(esc1_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_2);
         if (flag == 1){
             edoDes = 3;
             flag = 0;
@@ -291,7 +341,7 @@ void aislado(){
         }
         break;
     case 3: //
-        interfaceProg2(esc1_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_3);
         if (flag == 1){
             edoDes = 4;
             flag = 0;
@@ -299,7 +349,7 @@ void aislado(){
         }
         break;
     case 4: //
-        interfaceProg2(esc1_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_4);
         if (flag == 1){
             edoDes = 5;
             flag = 0;
@@ -307,7 +357,7 @@ void aislado(){
         }
         break;
     case 5: //
-        interfaceProg2(esc1_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_5);
         if (flag == 1){
             edoDes = 6;
             flag = 0;
@@ -315,7 +365,7 @@ void aislado(){
         }
         break;
     case 6: //
-        interfaceProg2(esc1_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_6);
         if (flag == 1){
             edoDes = 7;
             flag = 0;
@@ -323,7 +373,7 @@ void aislado(){
         }
         break;
     case 7: //
-        interfaceProg2(esc1_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_7);
         if (flag == 1){
             edoDes = 8;
             flag = 0;
@@ -331,7 +381,7 @@ void aislado(){
         }
         break;
     case 8: //
-        interfaceProg2(esc1_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_8);
         if (flag == 1){
             edoDes = 9;
             flag = 0;
@@ -339,7 +389,7 @@ void aislado(){
         }
         break;
     case 9: //
-        interfaceProg2(esc1_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_9);
         if (flag == 1){
             edoDes = 10;
             flag = 0;
@@ -347,7 +397,7 @@ void aislado(){
         }
         break;
     case 10: //
-        interfaceProg2(esc2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2);
         if (flag == 1){
             edoDes = 11;
             flag = 0;
@@ -355,7 +405,7 @@ void aislado(){
         }
         break;
     case 11: //
-        interfaceProg2(esc2_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_1);
         if (flag == 1){
             edoDes = 12;
             flag = 0;
@@ -363,7 +413,7 @@ void aislado(){
         }
         break;
     case 12: //
-        interfaceProg2(esc2_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_2);
         if (flag == 1){
             edoDes = 13;
             flag = 0;
@@ -371,7 +421,7 @@ void aislado(){
         }
         break;
     case 13: //
-        interfaceProg2(esc2_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_3);
         if (flag == 1){
             edoDes = 14;
             flag = 0;
@@ -379,7 +429,7 @@ void aislado(){
         }
         break;
     case 14: //
-        interfaceProg2(esc2_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_4);
         if (flag == 1){
             edoDes = 15;
             flag = 0;
@@ -387,7 +437,7 @@ void aislado(){
         }
         break;
     case 15: //
-        interfaceProg2(esc2_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_5);
         if (flag == 1){
             edoDes = 16;
             flag = 0;
@@ -395,7 +445,7 @@ void aislado(){
         }
         break;
     case 16: //
-        interfaceProg2(esc2_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_6);
         if (flag == 1){
             edoDes = 17;
             flag = 0;
@@ -403,7 +453,7 @@ void aislado(){
         }
         break;
     case 17: //
-        interfaceProg2(esc2_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_7);
         if (flag == 1){
             edoDes = 18;
             flag = 0;
@@ -411,7 +461,7 @@ void aislado(){
         }
         break;
     case 18: //
-        interfaceProg2(esc2_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_8);
         if (flag == 1){
             edoDes = 19;
             flag = 0;
@@ -419,7 +469,7 @@ void aislado(){
         }
         break;
     case 19: //
-        interfaceProg2(esc2_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_9);
         if (flag == 1){
             edoDes = 20;
             flag = 0;
@@ -427,7 +477,7 @@ void aislado(){
         }
         break;
     case 20: //
-        interfaceProg2(esc3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3);
         if (flag == 1){
             edoDes = 21;
             flag = 0;
@@ -435,7 +485,7 @@ void aislado(){
         }
         break;
     case 21: //
-        interfaceProg2(esc3_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_1);
         if (flag == 1){
             edoDes = 22;
             flag = 0;
@@ -443,7 +493,7 @@ void aislado(){
         }
         break;
     case 22: //
-        interfaceProg2(esc3_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_2);
         if (flag == 1){
             edoDes = 23;
             flag = 0;
@@ -451,7 +501,7 @@ void aislado(){
         }
         break;
     case 23: //
-        interfaceProg2(esc3_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_3);
         if (flag == 1){
             edoDes = 24;
             flag = 0;
@@ -459,7 +509,7 @@ void aislado(){
         }
         break;
     case 24: //
-        interfaceProg2(esc3_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_4);
         if (flag == 1){
             edoDes = 25;
             flag = 0;
@@ -467,7 +517,7 @@ void aislado(){
         }
         break;
     case 25: //
-        interfaceProg2(esc3_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_5);
         if (flag == 1){
             edoDes = 26;
             flag = 0;
@@ -475,7 +525,7 @@ void aislado(){
         }
         break;
     case 26: //
-        interfaceProg2(esc3_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_6);
         if (flag == 1){
             edoDes = 27;
             flag = 0;
@@ -483,7 +533,7 @@ void aislado(){
         }
         break;
     case 27: //
-        interfaceProg2(esc3_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_7);
         if (flag == 1){
             edoDes = 28;
             flag = 0;
@@ -491,7 +541,7 @@ void aislado(){
         }
         break;
     case 28: //
-        interfaceProg2(esc3_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_8);
         if (flag == 1){
             edoDes = 29;
             flag = 0;
@@ -499,7 +549,7 @@ void aislado(){
         }
         break;
     case 29: //
-        interfaceProg2(esc3_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_9);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -512,7 +562,7 @@ void aislado(){
 void destello(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -520,7 +570,7 @@ void destello(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -533,7 +583,7 @@ void destello(){
 void sincronizado(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -541,7 +591,7 @@ void sincronizado(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOn); //delay(375);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -551,7 +601,8 @@ void sincronizado(){
   }
 }
 ////*Función de interface de Registros de Desplazamiento*////
-void ledWrite(int Reg1, int Reg2, int Reg3){
+void ledWrite(char Reg4, char Reg3, char Reg2, char Reg1){
+   shiftOut(pinData, pinClock, LSBFIRST, Reg4);
    shiftOut(pinData, pinClock, LSBFIRST, Reg3);
    shiftOut(pinData, pinClock, LSBFIRST, Reg2);
    shiftOut(pinData, pinClock, LSBFIRST, Reg1);
