@@ -56,45 +56,6 @@ unsigned long esce3_9 = 0b00100110000101000100000000000000;
 // Variables de Programación
 int escOff[24] =  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0}; // Todo Apagado
 int escOn[24] =   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0}; // Todo Encendido
-//////////////////////////////////////*Programación*//////////////////////////////////////////
-int esc1[24] =    {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // ***Escenario 1***
-int esc1_1[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_2[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_3[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_4[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_5[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_6[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_7[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_8[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_9[24] =  {0,1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-//////////////////////////////////////////////////////////////////////////////////////////////
-int esc2[24] =    {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // ***Escenario 2***
-int esc2_1[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_2[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_3[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_4[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_5[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_6[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_7[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_8[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_9[24] =  {0,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,0, 0,0,0,0,0,0}; // Tiempo de ambar
-//////////////////////////////////////////////////////////////////////////////////////////////
-int esc3[24] =    {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_1[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_2[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_3[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_4[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_5[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_6[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_7[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_8[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_9[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1, 0,0,0,0,0,0}; // Tiempo de ambar
-//////////////////////////////////////////////////////////////////////////////////////////////
-int outputArray1[8];
-int outputArray2[8];
-int outputArray3[8];
-int outputArray4[8];
-int size = sizeof(outputArray1) / sizeof(outputArray1[0]);
 
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
 
@@ -123,11 +84,6 @@ void loop() {
   // Función de tiempo real
   tiempoReal();
 
-  //interfaceProg(esce1);
-  //delay(1000);
-  //interfaceProg(esce1_1);
-  //delay(1000);
-
   // Lectura de Modo
   modofunc();
 }
@@ -140,35 +96,6 @@ void interfaceProg(unsigned long var32Bits) {
     unsigned char var4 = ((var32Bits >> 24) & 0xFF);
 
     ledWrite(var1,var2,var3,var4);
-}
-// Función de interface 32 a 8 bits
-void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* outputArray3, int size) {
-    for (int i = 0; i < 8; i++) {
-        outputArray1[i] = inputArray[i];
-        outputArray2[i] = inputArray[i + 8];
-        outputArray3[i] = inputArray[i + 16];
-    }
-    /*
-  	Serial.println(size);
-  	Serial.println("");
-    Serial.println(binaryArrayToInt(outputArray1,size));
-  	Serial.println(binaryArrayToInt(outputArray2,size));
-  	Serial.println(binaryArrayToInt(outputArray3,size));*/
-  	// Escritura de los arreglos de 8 bits a Salida
-  	int dig0 = binaryArrayToInt(outputArray1,size);
-  	int dig1 = binaryArrayToInt(outputArray2,size);
-    int dig2 = binaryArrayToInt(outputArray3,size);
-  	
-    //ledWrite(dig0,dig1,dig2);
-    
-}
-
-unsigned long int binaryArrayToInt(int* binaryArray, int size) {
-  unsigned long int result = 0;
-  for (int i = 0; i < size; i++) {
-    result = result * 2 + binaryArray[i];
-  }
-  return result;
 }
 //Función de Estados
 void ActualizarSemaforo() {
