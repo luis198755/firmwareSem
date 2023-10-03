@@ -18,44 +18,41 @@ unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
 // Variables de Programación
-unsigned long EscOn   = 0b11111111111111111111111111111111;
-unsigned long EscOff  = 0b00000000000000000000000000000000;
+unsigned long EscOn   = 0b11111111111111111111111111111111; // Todo Apagado
+unsigned long EscOff  = 0b00000000000000000000000000000000; // Todo Encendido
 //////////////////////////////////////*Programación*//////////////////////////////////////////
 unsigned long esce1   = 0b10010010010000100100000000000000; // ***Escenario 1***
-unsigned long esce1_1 = 0b00000000010000100100000000000000;
-unsigned long esce1_2 = 0b10010010010000100100000000000000;
-unsigned long esce1_3 = 0b00000000010000100100000000000000;
-unsigned long esce1_4 = 0b10010010010000100100000000000000;
-unsigned long esce1_5 = 0b00000000010000100100000000000000;
-unsigned long esce1_6 = 0b10010010010000100100000000000000;
-unsigned long esce1_7 = 0b00000000010000100100000000000000;
-unsigned long esce1_8 = 0b10010010010000100100000000000000;
-unsigned long esce1_9 = 0b01001001010000100100000000000000;
+unsigned long esce1_1 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_2 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_3 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_4 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_5 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_6 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_7 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_8 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_9 = 0b01001001010000100100000000000000; // Tiempo de ambar
 //////////////////////////////////////////////////////////////////////////////////////////////
 unsigned long esce2   = 0b00100100110000110000000000000000; // ***Escenario 2***
-unsigned long esce2_1 = 0b00100100100000100000000000000000;
-unsigned long esce2_2 = 0b00100100110000110000000000000000;
-unsigned long esce2_3 = 0b00100100100000100000000000000000;
-unsigned long esce2_4 = 0b00100100110000110000000000000000;
-unsigned long esce2_5 = 0b00100100100000100000000000000000;
-unsigned long esce2_6 = 0b00100100110000110000000000000000;
-unsigned long esce2_7 = 0b00100100100000100000000000000000;
-unsigned long esce2_8 = 0b00100100110000110000000000000000;
-unsigned long esce2_9 = 0b00100100101000101000000000000000;
+unsigned long esce2_1 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_2 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_3 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_4 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_5 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_6 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_7 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_8 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_9 = 0b00100100101000101000000000000000; // Tiempo de ambar
 //////////////////////////////////////////////////////////////////////////////////////////////
-unsigned long esce3   = 0b00100110000110000100000000000000;// ***Escenario 3***
-unsigned long esce3_1 = 0b00100110000100000100000000000000;
-unsigned long esce3_2 = 0b00100110000110000100000000000000;
-unsigned long esce3_3 = 0b00100110000100000100000000000000;
-unsigned long esce3_4 = 0b00100110000110000100000000000000;
-unsigned long esce3_5 = 0b00100110000100000100000000000000;
-unsigned long esce3_6 = 0b00100110000110000100000000000000;
-unsigned long esce3_7 = 0b00100110000100000100000000000000;
-unsigned long esce3_8 = 0b00100110000110000100000000000000;
-unsigned long esce3_9 = 0b00100110000101000100000000000000;
-// Variables de Programación
-int escOff[24] =  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0}; // Todo Apagado
-int escOn[24] =   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0}; // Todo Encendido
+unsigned long esce3   = 0b00100110000110000100000000000000; // ***Escenario 3***
+unsigned long esce3_1 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_2 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_3 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_4 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_5 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_6 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_7 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_8 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_9 = 0b00100110000101000100000000000000; // Tiempo de ambar
 
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
 
@@ -88,7 +85,7 @@ void loop() {
   modofunc();
 }
 //////////////////////*Funciones*/////////////////////////
-// Función de interface 32 8 bits - en base a variables
+// Función de interface 32 a 8 bits - en base a variables
 void interfaceProg(unsigned long var32Bits) {
     unsigned char var1 = (var32Bits & 0xFF);
     unsigned char var2 = ((var32Bits >> 8) & 0xFF);
