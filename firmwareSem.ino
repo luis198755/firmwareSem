@@ -17,6 +17,82 @@ int modo = 0;
 unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
+// Arreglos de programación
+unsigned long prog[30] = {
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000,
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000,
+                            0b01001001010000100100000000000000,
+
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100101000101000000000000000,
+
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000101000100000000000000
+};
+unsigned long time[30] = {
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000,
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000,
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000
+};
+
+// Declarar una variable para almacenar el tiempo actual
+unsigned long tiempo;
+
+unsigned seg = 1;
+
+// Declarar una variable para almacenar el índice del arreglo
+int indice = 0;
+
 // Variables de Programación
 unsigned long EscOn   = 0b11111111111111111111111111111111; // Todo Apagado
 unsigned long EscOff  = 0b00000000000000000000000000000000; // Todo Encendido
@@ -74,15 +150,35 @@ void setup() {
   
   // Apagado de todas las fases
   fasesOff(); delay(2000);
+
+  Serial.println(prog[0]);
+  // Obtener el tiempo actual en milisegundos
+  tiempo = millis();
 }
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
   // Función de tiempo real
-  tiempoReal();
-
+  //tiempoReal();
   // Lectura de Modo
-  modofunc();
+  //modofunc();
+  
+  // Si han pasado más de 1000 milisegundos desde el último tiempo
+  if (millis() - tiempo > (time[indice])) {
+    // Imprimir el elemento del arreglo correspondiente al índice
+    Serial.println(prog[indice+1]);
+
+    // Incrementar el índice en uno
+    indice++;
+
+    // Si el índice llega al final del arreglo, reiniciarlo a cero
+    if (indice == 30) {
+      indice = 0;
+    }
+
+    // Actualizar el tiempo actual
+    tiempo = millis();
+  }
 }
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits - en base a variables
