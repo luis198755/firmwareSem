@@ -3,9 +3,10 @@
 int pinData  = 2;
 int pinLatch = 3;
 int pinClock = 4;
+int pinOE = 5;
 ////*Definición de pines de McU de entrada para pruebas*///
 #define CantidadBotonEntrada 4
-int botonEntrada[CantidadBotonEntrada] = {5, 6, 7, 8};
+int botonEntrada[CantidadBotonEntrada] = {6, 7, 8, 9};
 
 // Variables Globales
 //Variables de la máquina de estado
@@ -55,6 +56,7 @@ unsigned long prog[31] = {
 };                          
 unsigned long time[31] = {  
                             100,
+
                             10000,
                             375,
                             375,
@@ -65,6 +67,7 @@ unsigned long time[31] = {
                             375,
                             375,
                             3000,
+
                             10000,
                             375,
                             375,
@@ -75,6 +78,7 @@ unsigned long time[31] = {
                             375,
                             375,
                             3000,
+
                             10000,
                             375,
                             375,
@@ -144,6 +148,9 @@ void setup() {
   pinMode(pinData, OUTPUT);
   pinMode(pinLatch, OUTPUT);
   pinMode(pinClock, OUTPUT);
+  pinMode(pinOE, OUTPUT);
+  ////////////*Desactivar Registros*////////////////////////
+  digitalWrite(pinOE, HIGH);
   ////////////*Definición de pines como entrada*////////////
   for (int i=0; i<CantidadBotonEntrada; i++){
     pinMode(botonEntrada[i], INPUT);
@@ -151,9 +158,8 @@ void setup() {
   /////////////////////////////////////////////////////////
   
   // Apagado de todas las fases
-  interfaceProg(EscOff); delay(2000);
+  interfaceProg(EscOff); //delay(2000);
 
-  
   // Obtener el tiempo actual en milisegundos
   tiempo = millis();
 }
@@ -164,29 +170,31 @@ void loop() {
   //tiempoReal();
   // Lectura de Modo
   //modofunc();
-  
-  // Si han pasado más de 1000 milisegundos desde el último tiempo
-  if (millis() - tiempo > (time[indice])) {
+  ////////////*Activar Registros*////////////////////////
+  digitalWrite(pinOE, LOW);
 
-     // Incrementar el índice en uno
+  // Si han pasado más de 1000 milisegundos desde el último tiempo
+  if (millis() - tiempo >= (time[indice])) {
+    // Actualizar el tiempo actual
+    tiempo = millis();
+    // Incrementar el índice en uno
     indice++;
     
     // Si el índice llega al final del arreglo, reiniciarlo a cero
     if (indice != 31) {
         // Imprimir el elemento del arreglo correspondiente al índice
-        Serial.print(indice);
-        Serial.print(" - ");
-        Serial.print(time[indice]);
-        Serial.print(" - ");
-        Serial.println(prog[indice], BIN);
+        //Serial.print(indice);
+        //Serial.print(" - ");
+        //Serial.print(time[indice]);
+        //Serial.print(" - ");
+        //Serial.println(prog[indice], BIN);
         interfaceProg(prog[indice]);
     }
     else {
         indice = 0;
     }
 
-    // Actualizar el tiempo actual
-    tiempo = millis();
+    
   }
 }
 //////////////////////*Funciones*/////////////////////////
