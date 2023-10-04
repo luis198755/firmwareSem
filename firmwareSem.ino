@@ -18,7 +18,8 @@ unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
 // Arreglos de programación
-unsigned long prog[30] = {
+unsigned long prog[31] = {
+                            0b00000000000000000000000000000000,
                             0b10010010010000100100000000000000, 
                             0b00000000010000100100000000000000,
                             0b10010010010000100100000000000000, 
@@ -50,9 +51,10 @@ unsigned long prog[30] = {
                             0b00100110000110000100000000000000,
                             0b00100110000100000100000000000000,
                             0b00100110000110000100000000000000,
-                            0b00100110000101000100000000000000
-};
-unsigned long time[30] = {
+                            0b00100110000101000100000000000000 
+};                          
+unsigned long time[31] = {  
+                            100,
                             10000,
                             375,
                             375,
@@ -128,7 +130,7 @@ unsigned long esce3_5 = 0b00100110000100000100000000000000; // Transición de Ve
 unsigned long esce3_6 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
 unsigned long esce3_7 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
 unsigned long esce3_8 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
-unsigned long esce3_9 = 0b00100110000101000100000000000000; // Tiempo de ambar
+unsigned long esce3_9 = 0b00100110000101000100000000000000; // Tiempo de ambar  
 
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
 
@@ -149,9 +151,9 @@ void setup() {
   /////////////////////////////////////////////////////////
   
   // Apagado de todas las fases
-  fasesOff(); delay(2000);
+  interfaceProg(EscOff); delay(2000);
 
-  Serial.println(prog[0]);
+  
   // Obtener el tiempo actual en milisegundos
   tiempo = millis();
 }
@@ -165,15 +167,22 @@ void loop() {
   
   // Si han pasado más de 1000 milisegundos desde el último tiempo
   if (millis() - tiempo > (time[indice])) {
-    // Imprimir el elemento del arreglo correspondiente al índice
-    Serial.println(prog[indice+1]);
 
-    // Incrementar el índice en uno
+     // Incrementar el índice en uno
     indice++;
-
+    
     // Si el índice llega al final del arreglo, reiniciarlo a cero
-    if (indice == 30) {
-      indice = 0;
+    if (indice != 31) {
+        // Imprimir el elemento del arreglo correspondiente al índice
+        Serial.print(indice);
+        Serial.print(" - ");
+        Serial.print(time[indice]);
+        Serial.print(" - ");
+        Serial.println(prog[indice], BIN);
+        interfaceProg(prog[indice]);
+    }
+    else {
+        indice = 0;
     }
 
     // Actualizar el tiempo actual
@@ -183,10 +192,10 @@ void loop() {
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits - en base a variables
 void interfaceProg(unsigned long var32Bits) {
-    unsigned char var1 = (var32Bits & 0xFF);
-    unsigned char var2 = ((var32Bits >> 8) & 0xFF);
-    unsigned char var3 = ((var32Bits >> 16) & 0xFF);
-    unsigned char var4 = ((var32Bits >> 24) & 0xFF);
+    unsigned char var1 = (var32Bits & 0xFF);// ^ 0xFF;
+    unsigned char var2 = ((var32Bits >> 8) & 0xFF);// ^ 0xFF;
+    unsigned char var3 = ((var32Bits >> 16) & 0xFF);// ^ 0xFF;
+    unsigned char var4 = ((var32Bits >> 24) & 0xFF);// ^ 0xFF;
 
     ledWrite(var1,var2,var3,var4);
 }
