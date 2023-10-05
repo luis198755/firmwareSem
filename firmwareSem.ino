@@ -79,7 +79,7 @@ unsigned long time[31] = {
                             375,
                             3000,
 
-                            10000,
+                            12000,
                             375,
                             375,
                             375,
@@ -200,10 +200,10 @@ void loop() {
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits - en base a variables
 void interfaceProg(unsigned long var32Bits) {
-    unsigned char var1 = (var32Bits & 0xFF);// ^ 0xFF;
-    unsigned char var2 = ((var32Bits >> 8) & 0xFF);// ^ 0xFF;
-    unsigned char var3 = ((var32Bits >> 16) & 0xFF);// ^ 0xFF;
-    unsigned char var4 = ((var32Bits >> 24) & 0xFF);// ^ 0xFF;
+    unsigned char var1 = (var32Bits & 0xFF) ^ 0xFF;
+    unsigned char var2 = ((var32Bits >> 8) & 0xFF) ^ 0xFF;
+    unsigned char var3 = ((var32Bits >> 16) & 0xFF) ^ 0xFF;
+    unsigned char var4 = ((var32Bits >> 24) & 0xFF) ^ 0xFF;
 
     ledWrite(var1,var2,var3,var4);
 }
