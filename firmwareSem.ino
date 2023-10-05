@@ -3,9 +3,10 @@
 int pinData  = 2;
 int pinLatch = 3;
 int pinClock = 4;
+int pinOE = 5;
 ////*Definición de pines de McU de entrada para pruebas*///
 #define CantidadBotonEntrada 4
-int botonEntrada[CantidadBotonEntrada] = {5, 6, 7, 8};
+int botonEntrada[CantidadBotonEntrada] = {6, 7, 8, 9};
 
 // Variables Globales
 //Variables de la máquina de estado
@@ -17,48 +18,123 @@ int modo = 0;
 unsigned long previousTime = 0;
 unsigned long te = 375;
 unsigned long t = 10000;
+// Arreglos de programación
+unsigned long prog[31] = {
+                            0b00000000000000000000000000000000,
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000,
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000, 
+                            0b00000000010000100100000000000000, 
+                            0b10010010010000100100000000000000,
+                            0b01001001010000100100000000000000,
+
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100100000100000000000000000,
+                            0b00100100110000110000000000000000,
+                            0b00100100101000101000000000000000,
+
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000100000100000000000000,
+                            0b00100110000110000100000000000000,
+                            0b00100110000101000100000000000000 
+};                          
+unsigned long time[31] = {  
+                            100,
+
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000,
+
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000,
+
+                            10000,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            375,
+                            3000
+};
+
+// Declarar una variable para almacenar el tiempo actual
+unsigned long tiempo;
+
+unsigned seg = 1;
+
+// Declarar una variable para almacenar el índice del arreglo
+int indice = 0;
+
 // Variables de Programación
-int escOff[24] =  {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0, 0,0,0,0,0,0}; // Todo Apagado
-int escOn[24] =   {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1, 0,0,0,0,0,0}; // Todo Encendido
+unsigned long EscOn   = 0b11111111111111111111111111111111; // Todo Apagado
+unsigned long EscOff  = 0b00000000000000000000000000000000; // Todo Encendido
 //////////////////////////////////////*Programación*//////////////////////////////////////////
-int esc1[24] =    {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // ***Escenario 1***
-int esc1_1[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_2[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_3[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_4[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_5[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_6[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_7[24] =  {0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_8[24] =  {1,0,0,1,0,0,1,0,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc1_9[24] =  {0,1,0,0,1,0,0,1,0,1,0,0,0,0,1,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
+unsigned long esce1   = 0b10010010010000100100000000000000; // ***Escenario 1***
+unsigned long esce1_1 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_2 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_3 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_4 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_5 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_6 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_7 = 0b00000000010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_8 = 0b10010010010000100100000000000000; // Transición de Verde a Ambar
+unsigned long esce1_9 = 0b01001001010000100100000000000000; // Tiempo de ambar
 //////////////////////////////////////////////////////////////////////////////////////////////
-int esc2[24] =    {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // ***Escenario 2***
-int esc2_1[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_2[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_3[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_4[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_5[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_6[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_7[24] =  {0,0,1,0,0,1,0,0,1,0,0,0,0,0,1,0,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_8[24] =  {0,0,1,0,0,1,0,0,1,1,0,0,0,0,1,1,0,0, 0,0,0,0,0,0}; // Transisción de Verde
-int esc2_9[24] =  {0,0,1,0,0,1,0,0,1,0,1,0,0,0,1,0,1,0, 0,0,0,0,0,0}; // Tiempo de ambar
+unsigned long esce2   = 0b00100100110000110000000000000000; // ***Escenario 2***
+unsigned long esce2_1 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_2 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_3 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_4 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_5 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_6 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_7 = 0b00100100100000100000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_8 = 0b00100100110000110000000000000000; // Transición de Verde a Ambar
+unsigned long esce2_9 = 0b00100100101000101000000000000000; // Tiempo de ambar
 //////////////////////////////////////////////////////////////////////////////////////////////
-int esc3[24] =    {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_1[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_2[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_3[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_4[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_5[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_6[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_7[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_8[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,1,0,0,0,0,1, 0,0,0,0,0,0}; // Transisción de Verde
-int esc3_9[24] =  {0,0,1,0,0,1,1,0,0,0,0,1,0,1,0,0,0,1, 0,0,0,0,0,0}; // Tiempo de ambar
-//////////////////////////////////////////////////////////////////////////////////////////////
-int outputArray1[8];
-int outputArray2[8];
-int outputArray3[8];
-int outputArray4[8];
-int size = sizeof(outputArray1) / sizeof(outputArray1[0]);
+unsigned long esce3   = 0b00100110000110000100000000000000; // ***Escenario 3***
+unsigned long esce3_1 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_2 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_3 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_4 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_5 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_6 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_7 = 0b00100110000100000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_8 = 0b00100110000110000100000000000000; // Transición de Verde a Ambar
+unsigned long esce3_9 = 0b00100110000101000100000000000000; // Tiempo de ambar  
 
 ///////////////////////////////////*FIN Programación*//////////////////////////////////////////
 
@@ -72,6 +148,9 @@ void setup() {
   pinMode(pinData, OUTPUT);
   pinMode(pinLatch, OUTPUT);
   pinMode(pinClock, OUTPUT);
+  pinMode(pinOE, OUTPUT);
+  ////////////*Desactivar Registros*////////////////////////
+  digitalWrite(pinOE, HIGH);
   ////////////*Definición de pines como entrada*////////////
   for (int i=0; i<CantidadBotonEntrada; i++){
     pinMode(botonEntrada[i], INPUT);
@@ -79,46 +158,54 @@ void setup() {
   /////////////////////////////////////////////////////////
   
   // Apagado de todas las fases
-  fasesOff(); delay(2000);
+  interfaceProg(EscOff); //delay(2000);
+
+  // Obtener el tiempo actual en milisegundos
+  tiempo = millis();
 }
 /////////////*Void Loop*/////////////
 void loop() {
   // Declaración de variables locales
   // Función de tiempo real
-  tiempoReal();
-
+  //tiempoReal();
   // Lectura de Modo
-  modofunc();
+  //modofunc();
+  ////////////*Activar Registros*////////////////////////
+  digitalWrite(pinOE, LOW);
+
+  // Si han pasado más de 1000 milisegundos desde el último tiempo
+  if (millis() - tiempo >= (time[indice])) {
+    // Actualizar el tiempo actual
+    tiempo = millis();
+    // Incrementar el índice en uno
+    indice++;
+    
+    // Si el índice llega al final del arreglo, reiniciarlo a cero
+    if (indice != 31) {
+        // Imprimir el elemento del arreglo correspondiente al índice
+        //Serial.print(indice);
+        //Serial.print(" - ");
+        //Serial.print(time[indice]);
+        //Serial.print(" - ");
+        //Serial.println(prog[indice], BIN);
+        interfaceProg(prog[indice]);
+    }
+    else {
+        indice = 0;
+    }
+
+    
+  }
 }
 //////////////////////*Funciones*/////////////////////////
-// Función de interface 32 a 8 bits
-void interfaceProg2(int* inputArray, int* outputArray1, int* outputArray2, int* outputArray3, int size) {
-    for (int i = 0; i < 8; i++) {
-        outputArray1[i] = inputArray[i];
-        outputArray2[i] = inputArray[i + 8];
-        outputArray3[i] = inputArray[i + 16];
-    }
-    /*
-  	Serial.println(size);
-  	Serial.println("");
-    Serial.println(binaryArrayToInt(outputArray1,size));
-  	Serial.println(binaryArrayToInt(outputArray2,size));
-  	Serial.println(binaryArrayToInt(outputArray3,size));*/
-  	// Escritura de los arreglos de 8 bits a Salida
-  	int dig0 = binaryArrayToInt(outputArray1,size);
-  	int dig1 = binaryArrayToInt(outputArray2,size);
-    int dig2 = binaryArrayToInt(outputArray3,size);
-  	
-    ledWrite(dig0,dig1,dig2);
-    
-}
+// Función de interface 32 a 8 bits - en base a variables
+void interfaceProg(unsigned long var32Bits) {
+    unsigned char var1 = (var32Bits & 0xFF);// ^ 0xFF;
+    unsigned char var2 = ((var32Bits >> 8) & 0xFF);// ^ 0xFF;
+    unsigned char var3 = ((var32Bits >> 16) & 0xFF);// ^ 0xFF;
+    unsigned char var4 = ((var32Bits >> 24) & 0xFF);// ^ 0xFF;
 
-unsigned long int binaryArrayToInt(int* binaryArray, int size) {
-  unsigned long int result = 0;
-  for (int i = 0; i < size; i++) {
-    result = result * 2 + binaryArray[i];
-  }
-  return result;
+    ledWrite(var1,var2,var3,var4);
 }
 //Función de Estados
 void ActualizarSemaforo() {
@@ -158,7 +245,7 @@ void ActualizarSemaforo() {
 }
 // Apagar todas las fases
 void fasesOff(){
-    interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); 
+    interfaceProg(EscOff); 
 }
 // Estado 0
 void edo0(){
@@ -245,7 +332,7 @@ void tiempoReal(){
 void manual(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOff);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -253,7 +340,7 @@ void manual(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -267,7 +354,7 @@ void manual(){
 void aislado(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(esc1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -275,7 +362,7 @@ void aislado(){
         }
         break;
     case 1: //
-        interfaceProg2(esc1_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_1);
         if (flag == 1){
             edoDes = 2;
             flag = 0;
@@ -283,7 +370,7 @@ void aislado(){
         }
         break;
     case 2: //
-        interfaceProg2(esc1_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_2);
         if (flag == 1){
             edoDes = 3;
             flag = 0;
@@ -291,7 +378,7 @@ void aislado(){
         }
         break;
     case 3: //
-        interfaceProg2(esc1_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_3);
         if (flag == 1){
             edoDes = 4;
             flag = 0;
@@ -299,7 +386,7 @@ void aislado(){
         }
         break;
     case 4: //
-        interfaceProg2(esc1_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_4);
         if (flag == 1){
             edoDes = 5;
             flag = 0;
@@ -307,7 +394,7 @@ void aislado(){
         }
         break;
     case 5: //
-        interfaceProg2(esc1_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_5);
         if (flag == 1){
             edoDes = 6;
             flag = 0;
@@ -315,7 +402,7 @@ void aislado(){
         }
         break;
     case 6: //
-        interfaceProg2(esc1_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_6);
         if (flag == 1){
             edoDes = 7;
             flag = 0;
@@ -323,7 +410,7 @@ void aislado(){
         }
         break;
     case 7: //
-        interfaceProg2(esc1_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_7);
         if (flag == 1){
             edoDes = 8;
             flag = 0;
@@ -331,7 +418,7 @@ void aislado(){
         }
         break;
     case 8: //
-        interfaceProg2(esc1_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_8);
         if (flag == 1){
             edoDes = 9;
             flag = 0;
@@ -339,7 +426,7 @@ void aislado(){
         }
         break;
     case 9: //
-        interfaceProg2(esc1_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce1_9);
         if (flag == 1){
             edoDes = 10;
             flag = 0;
@@ -347,7 +434,7 @@ void aislado(){
         }
         break;
     case 10: //
-        interfaceProg2(esc2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2);
         if (flag == 1){
             edoDes = 11;
             flag = 0;
@@ -355,7 +442,7 @@ void aislado(){
         }
         break;
     case 11: //
-        interfaceProg2(esc2_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_1);
         if (flag == 1){
             edoDes = 12;
             flag = 0;
@@ -363,7 +450,7 @@ void aislado(){
         }
         break;
     case 12: //
-        interfaceProg2(esc2_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_2);
         if (flag == 1){
             edoDes = 13;
             flag = 0;
@@ -371,7 +458,7 @@ void aislado(){
         }
         break;
     case 13: //
-        interfaceProg2(esc2_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_3);
         if (flag == 1){
             edoDes = 14;
             flag = 0;
@@ -379,7 +466,7 @@ void aislado(){
         }
         break;
     case 14: //
-        interfaceProg2(esc2_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_4);
         if (flag == 1){
             edoDes = 15;
             flag = 0;
@@ -387,7 +474,7 @@ void aislado(){
         }
         break;
     case 15: //
-        interfaceProg2(esc2_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_5);
         if (flag == 1){
             edoDes = 16;
             flag = 0;
@@ -395,7 +482,7 @@ void aislado(){
         }
         break;
     case 16: //
-        interfaceProg2(esc2_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_6);
         if (flag == 1){
             edoDes = 17;
             flag = 0;
@@ -403,7 +490,7 @@ void aislado(){
         }
         break;
     case 17: //
-        interfaceProg2(esc2_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_7);
         if (flag == 1){
             edoDes = 18;
             flag = 0;
@@ -411,7 +498,7 @@ void aislado(){
         }
         break;
     case 18: //
-        interfaceProg2(esc2_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_8);
         if (flag == 1){
             edoDes = 19;
             flag = 0;
@@ -419,7 +506,7 @@ void aislado(){
         }
         break;
     case 19: //
-        interfaceProg2(esc2_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce2_9);
         if (flag == 1){
             edoDes = 20;
             flag = 0;
@@ -427,7 +514,7 @@ void aislado(){
         }
         break;
     case 20: //
-        interfaceProg2(esc3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3);
         if (flag == 1){
             edoDes = 21;
             flag = 0;
@@ -435,7 +522,7 @@ void aislado(){
         }
         break;
     case 21: //
-        interfaceProg2(esc3_1,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_1);
         if (flag == 1){
             edoDes = 22;
             flag = 0;
@@ -443,7 +530,7 @@ void aislado(){
         }
         break;
     case 22: //
-        interfaceProg2(esc3_2,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_2);
         if (flag == 1){
             edoDes = 23;
             flag = 0;
@@ -451,7 +538,7 @@ void aislado(){
         }
         break;
     case 23: //
-        interfaceProg2(esc3_3,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_3);
         if (flag == 1){
             edoDes = 24;
             flag = 0;
@@ -459,7 +546,7 @@ void aislado(){
         }
         break;
     case 24: //
-        interfaceProg2(esc3_4,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_4);
         if (flag == 1){
             edoDes = 25;
             flag = 0;
@@ -467,7 +554,7 @@ void aislado(){
         }
         break;
     case 25: //
-        interfaceProg2(esc3_5,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_5);
         if (flag == 1){
             edoDes = 26;
             flag = 0;
@@ -475,7 +562,7 @@ void aislado(){
         }
         break;
     case 26: //
-        interfaceProg2(esc3_6,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_6);
         if (flag == 1){
             edoDes = 27;
             flag = 0;
@@ -483,7 +570,7 @@ void aislado(){
         }
         break;
     case 27: //
-        interfaceProg2(esc3_7,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_7);
         if (flag == 1){
             edoDes = 28;
             flag = 0;
@@ -491,7 +578,7 @@ void aislado(){
         }
         break;
     case 28: //
-        interfaceProg2(esc3_8,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_8);
         if (flag == 1){
             edoDes = 29;
             flag = 0;
@@ -499,7 +586,7 @@ void aislado(){
         }
         break;
     case 29: //
-        interfaceProg2(esc3_9,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(esce3_9);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -512,7 +599,7 @@ void aislado(){
 void destello(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -520,7 +607,7 @@ void destello(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size);
+        interfaceProg(EscOn);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -533,7 +620,7 @@ void destello(){
 void sincronizado(){
   switch (edoDes){
     case 0: //
-        interfaceProg2(escOff,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOff); //delay(375);
         if (flag == 1){
             edoDes = 1;
             flag = 0;
@@ -541,7 +628,7 @@ void sincronizado(){
         }
         break;
     case 1: //
-        interfaceProg2(escOn,outputArray1,outputArray2,outputArray3,size); //delay(375);
+        interfaceProg(EscOn); //delay(375);
         if (flag == 1){
             edoDes = 0;
             flag = 0;
@@ -551,7 +638,8 @@ void sincronizado(){
   }
 }
 ////*Función de interface de Registros de Desplazamiento*////
-void ledWrite(int Reg1, int Reg2, int Reg3){
+void ledWrite(char Reg4, char Reg3, char Reg2, char Reg1){
+   shiftOut(pinData, pinClock, LSBFIRST, Reg4);
    shiftOut(pinData, pinClock, LSBFIRST, Reg3);
    shiftOut(pinData, pinClock, LSBFIRST, Reg2);
    shiftOut(pinData, pinClock, LSBFIRST, Reg1);
