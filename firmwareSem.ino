@@ -295,7 +295,7 @@ void destello(){
 }
 // Función de sincronización
 void sincronizado(){
-  
+// Pendiente  
 }
 // Función de tiempo real
 unsigned long tiempoReal(unsigned long* time, unsigned long* prog, int longitud){
