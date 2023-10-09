@@ -7,6 +7,10 @@ int pinOE = 5;
 ////*Definición de pines de McU de entrada para pruebas*///
 #define CantidadBotonEntrada 4
 int botonEntrada[CantidadBotonEntrada] = {6, 7, 8, 9};
+int estadoBoton[CantidadBotonEntrada] = {LOW, LOW, LOW, LOW};
+
+int estadoBoton1 = LOW;    // Estado actual del primer botón
+int estadoBoton2 = LOW;    // Estado actual del segundo botón
 
 // Variables Globales
 //Variables de la máquina de estado
@@ -144,7 +148,7 @@ void setup() {
   
   ////////////*Definición de pines como entrada*////////////
   for (int i=0; i<CantidadBotonEntrada; i++){
-    pinMode(botonEntrada[i], INPUT);
+    pinMode(botonEntrada[i], INPUT_PULLUP);
   }
   /////////////////////////////////////////////////////////
 
@@ -165,10 +169,10 @@ void loop() {
 //////////////////////*Funciones*/////////////////////////
 // Función de interface 32 a 8 bits - en base a variables
 void interfaceProg(unsigned long var32Bits) {
-    unsigned char var1 = (var32Bits & 0xFF) ^ 0xFF;
-    unsigned char var2 = ((var32Bits >> 8) & 0xFF) ^ 0xFF;
-    unsigned char var3 = ((var32Bits >> 16) & 0xFF) ^ 0xFF;
-    unsigned char var4 = ((var32Bits >> 24) & 0xFF) ^ 0xFF;
+    unsigned char var1 = (var32Bits & 0xFF);// ^ 0xFF;
+    unsigned char var2 = ((var32Bits >> 8) & 0xFF);// ^ 0xFF;
+    unsigned char var3 = ((var32Bits >> 16) & 0xFF);// ^ 0xFF;
+    unsigned char var4 = ((var32Bits >> 24) & 0xFF);// ^ 0xFF;
 
     ledWrite(var1,var2,var3,var4);
 }
@@ -206,33 +210,58 @@ void edo6(){
 }
 // Función de Modo
 void modofunc(){
-  int buttonState[CantidadBotonEntrada];
+  int lecturaBoton[CantidadBotonEntrada];
   for (int i=0; i<CantidadBotonEntrada; i++){
-    buttonState[i] = digitalRead(botonEntrada[i]);
-    if (buttonState[i]==HIGH && i==0){
+    lecturaBoton[i] = digitalRead(botonEntrada[i]);
+
+    if (lecturaBoton[i]==LOW && i==0 && estadoBoton[i] == LOW){
       modo = 0; // Aislado
       indice = 0;
+      Serial.println("Modo: Aislado");
+      estadoBoton[i] = HIGH;
+      previousTime = millis();
     }
-    else if (buttonState[i]==HIGH && i==1){
+    else if (lecturaBoton[i]==HIGH && i==0){
+      estadoBoton[i] = LOW;
+    }
+
+    if (lecturaBoton[i]==LOW && i==1 && estadoBoton[i] == LOW){
       modo = 1; // Manual
-      //Serial.println(modo);
-      
-      //if (flag  == 1) {
-        Serial.println("Manual");
-        Serial.println(indice);
-        indice = indice +1;
-        Serial.println(indice);
-        flag = 0;
-      //}
-    }else if (buttonState[i]==HIGH && i==2){
-      modo = 2; // Destello
-      Serial.println(modo);
-      indice = 0;
-    }else if (buttonState[i]==HIGH && i==3){
-      modo = 3; // Sincronizado
-      Serial.println(modo);
-      indice = 0;
+      indice++;
+      Serial.println("Modo: Manual");
+      Serial.print("Indice: ");
+      Serial.print(indice);
+      Serial.println("");
+      estadoBoton[i] = HIGH;
+      previousTime = millis();
     }
+    else if (lecturaBoton[i]==HIGH && i==1){
+      estadoBoton[i] = LOW;
+    }
+
+    if (lecturaBoton[i]==LOW && i==2 && estadoBoton[i] == LOW){
+      modo = 2; // Destello
+      indice = 0;
+      Serial.println("Modo: Destello");
+      estadoBoton[i] = HIGH;
+      previousTime = millis();
+    }
+    else if (lecturaBoton[i]==HIGH && i==2){
+      estadoBoton[i] = LOW;
+    }
+
+    if (lecturaBoton[i]==LOW && i==3 && estadoBoton[i] == LOW){
+      modo = 3; // Sicronizado
+      indice = 0;
+      Serial.println("Modo: Sicronizado");
+      estadoBoton[i] = HIGH;
+      previousTime = millis();
+    }
+    else if (lecturaBoton[i]==HIGH && i==3){
+      estadoBoton[i] = LOW;
+    }
+    
+    
   }
   // Modos de funcionamiento
   switch (modo){
@@ -258,7 +287,7 @@ void aislado(){
 }
 // Función de modo manual
 void manual(){
-  
+  tiempoReal(time0, prog0, longitud);
 }
 // Función de destello
 void destello(){
